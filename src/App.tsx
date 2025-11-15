@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './pages/login';
+import Register from './pages/register';
+import { useState } from 'react';
+import { getLocalItem } from './helper/localStorage.helper';
+import Dashboard from './pages/dashboard';
+import ProtectedRoute from './components/protectedRoute';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+    const [authPayload, setAuthPayload] = useState<string | null>(
+        getLocalItem('auth_payload')
+    );
+    const isAuthenticated = Boolean(authPayload);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    return (
+        <BrowserRouter>
+            <div className="flex h-full w-screen bg-slate-900">
+                <Routes>
+                    <Route
+                        path="/login"
+                        element={
+                            <Login
+                                isAuthenticated={isAuthenticated}
+                                onLoginSuccess={() =>
+                                    setAuthPayload(getLocalItem('auth_payload'))
+                                }
+                            />
+                        }
+                    />
+                    <Route path="/register" element={<Register />} />
+                    <Route
+                        path="/"
+                        element={
+                            <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </div>
+        </BrowserRouter>
+    );
+};
 
-export default App
+export default App;
