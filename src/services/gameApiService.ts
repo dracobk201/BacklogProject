@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase';
-import type { BacklogItem, OpenCriticResults } from '../types/database.types';
+import type { OpenCriticResults } from '../types/addGame.types';
+import type { BacklogItem } from '../types/database.types';
 
 /**
  * Calls the Supabase Edge Function to search for games on IGDB.

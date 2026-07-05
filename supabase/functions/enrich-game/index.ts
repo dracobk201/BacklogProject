@@ -15,6 +15,19 @@ const IGDB_CLIENT_ID = Deno.env.get('IGDB_CLIENT_ID') || '';
 const IGDB_ACCESS_TOKEN = Deno.env.get('IGDB_ACCESS_TOKEN') || '';
 const OPENCRITIC_API_KEY = Deno.env.get('OPENCRITIC_API_KEY') || '';
 
+interface IGDBExternalGame {
+    category: number;
+    uid: string;
+}
+
+interface IGDBGame {
+    id: number;
+    name: string;
+    cover?: { image_id: string };
+    external_games?: IGDBExternalGame[];
+    first_release_date?: number;
+}
+
 const searchGamesFromIGDB = async (query: string) => {
     const url = 'https://api.igdb.com/v4/games';
     const body = `
@@ -37,12 +50,12 @@ const searchGamesFromIGDB = async (query: string) => {
         if (!response.ok) throw new Error(`IGDB API error: ${response.status}`);
         const data = await response.json();
 
-        return data.map((game: any) => {
+        return data.map((game: IGDBGame) => {
             const coverUrl = game.cover?.image_id
                 ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
                 : null;
             const steamExternal = game.external_games?.find(
-                (eg: any) => eg.category === 1
+                (eg: IGDBExternalGame) => eg.category === 1
             );
             const steamAppId = steamExternal ? steamExternal.uid : null;
 
@@ -57,9 +70,10 @@ const searchGamesFromIGDB = async (query: string) => {
                 game_type: null
             };
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Error searching IGDB:', error);
-        throw new Error(`IGDB Search failed: ${error.message}`);
+        const msg = error instanceof Error ? error.message : String(error);
+        throw new Error(`IGDB Search failed: ${msg}`);
     }
 };
 
@@ -71,7 +85,9 @@ const searchSteamAppId = async (gameTitle: string): Promise<string | null> => {
         const data = await response.json();
 
         if (data.items && data.items.length > 0) {
-            const app = data.items.find((item: any) => item.type === 'app');
+            const app = data.items.find(
+                (item: { type: string; id: number }) => item.type === 'app'
+            );
             if (app) {
                 return app.id.toString();
             }
@@ -222,9 +238,10 @@ serve(async (req) => {
             }
 
             const igdbData = await searchGamesFromIGDB(title);
-            let exactMatch = igdbGameId
-                ? igdbData.find((g: any) => g.game_id === igdbGameId) ||
-                  igdbData[0]
+            const exactMatch = igdbGameId
+                ? igdbData.find(
+                      (g: { game_id: string }) => g.game_id === igdbGameId
+                  ) || igdbData[0]
                 : igdbData[0];
 
             if (!exactMatch) {
@@ -296,8 +313,9 @@ serve(async (req) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400
         });
-    } catch (error: any) {
-        return new Response(JSON.stringify({ error: error.message }), {
+    } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : String(error);
+        return new Response(JSON.stringify({ error: msg }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 500
         });

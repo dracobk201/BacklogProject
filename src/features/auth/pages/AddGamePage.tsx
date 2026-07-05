@@ -23,7 +23,13 @@ import {
 import { addGameToBacklog } from '../../../services/backlogService';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
-import type { OpenCriticResults } from '../../../types/database.types';
+import type {
+    FormValues,
+    GameStatus,
+    GameType,
+    OpenCriticResults,
+    SelectedGameOption
+} from '../../../types/addGame.types';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -41,7 +47,7 @@ const AddGamePage: React.FC = () => {
         steam_app_id: string | null;
     }>({ game_id: '', steam_app_id: null });
     const [currentStatus, setCurrentStatus] = useState<string>('pending');
-    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
+    const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const onSearchGame = (value: string) => {
         if (!value) {
@@ -71,7 +77,8 @@ const AddGamePage: React.FC = () => {
         }, 500); // 500ms
     };
 
-    const onSelectGame = async (value: string, option: any) => {
+    const onSelectGame = async (value: string, option: SelectedGameOption) => {
+        console.log(value);
         const gameId = option.key;
         const game = searchResults.find(
             (g: OpenCriticResults) => g.game_id === gameId
@@ -111,7 +118,7 @@ const AddGamePage: React.FC = () => {
         }
     };
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: FormValues) => {
         try {
             setLoadingSearchGame(true);
             const gameData = {
@@ -124,30 +131,40 @@ const AddGamePage: React.FC = () => {
                 recommended: values.recommended || false,
                 length_hours: values.length_hours || null,
                 release_year: values.release_year
-                    ? values.release_year.year()
+                    ? dayjs(values.release_year).year()
                     : null,
                 rating: values.rating || null,
                 steam_rating: values.steam_rating || null,
-                platform: values.platform ? values.platform.join(' ') : null,
-                game_type: values.game_type,
-                status: values.status || 'pending',
+                platform:
+                    values.platform && values.platform.length > 1
+                        ? values.platform[1]
+                        : values.platform
+                          ? values.platform[0]
+                          : null,
+                game_type: values.game_type as GameType | null,
+                status: (values.status || 'pending') as GameStatus,
                 start_date: values.start_date
-                    ? values.start_date.toISOString()
+                    ? dayjs(values.start_date).toISOString()
                     : null,
                 completion_date: values.completion_date
-                    ? values.completion_date.toISOString()
+                    ? dayjs(values.completion_date).toISOString()
                     : null,
-                notes: values.notes || null
+                notes: values.notes || null,
+                cover_url: coverImageUrl || null
             };
 
-            await addGameToBacklog(gameData as any);
+            await addGameToBacklog(gameData);
             toast.success('Game added to your backlog!');
             form.resetFields();
             setCoverImageUrl('');
             setSelectedGameMeta({ game_id: '', steam_app_id: null });
-        } catch (error: any) {
+        } catch (error) {
             console.error('Submit error:', error);
-            toast.error(error.message || 'Failed to add game');
+            if (error instanceof Error) {
+                toast.error(error.message || 'Failed to add game');
+            } else {
+                toast.error('Failed to add game');
+            }
         } finally {
             setLoadingSearchGame(false);
         }

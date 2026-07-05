@@ -21,6 +21,7 @@ export interface BacklogItem {
     game_id: string;
     steam_app_id: string | null;
     game_title: string;
+    cover_url: string | null;
     excitement: number;
     dropped: boolean;
     beaten_before: boolean;
@@ -35,13 +36,4 @@ export interface BacklogItem {
     start_date: string | null;
     completion_date: string | null;
     notes: string | null;
-}
-
-export interface OpenCriticResults {
-    cover_url: string;
-    game_title: string;
-    game_id: string;
-    game_type: string | null;
-    release_year: number | null;
-    steam_app_id: string | null;
 }
