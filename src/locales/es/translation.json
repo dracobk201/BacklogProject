@@ -51,6 +51,24 @@
         "signIn": "Iniciar sesión",
         "signUp": "Registrarse"
     },
+    "ratingConfig": {
+        "title": "Configuración de Calificación",
+        "excitement": "Entusiasmo",
+        "dropped": "Abandonado",
+        "beatenBefore": "Pasado Antes",
+        "recommended": "Recomendado",
+        "platform": "Plataforma",
+        "releaseYear": "Año de Lanzamiento",
+        "ratingOpencritic": "Calificación (OpenCritic)",
+        "steamRating": "Calificación de Steam",
+        "lengthHours": "Duración (Horas)",
+        "gameType": "Tipo de Juego",
+        "submit": "Enviar",
+        "successAdded": "Configuración de calificación guardada!",
+        "errorFailed": "Error al guardar la configuración de calificación",
+        "releaseYearInfo": "Mientras más bajo el valor, más importantes son los juegos viejos. Mientras más alto, más importante es que sean recientes. Un 50 sería un, no importa.",
+        "lengthHoursInfo": "Mientras más bajo el valor, más importantes son los juegos cortos. Mientras más alto, más importante es que sean más largos. Un 50 sería un, no importa."
+    },
     "settings": {
         "language": "Language / Idioma",
         "english": "Inglés",

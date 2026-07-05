@@ -51,6 +51,24 @@
         "signIn": "Sign in",
         "signUp": "Sign up"
     },
+    "ratingConfig": {
+        "title": "Rating Configuration",
+        "excitement": "Excitement",
+        "dropped": "Dropped",
+        "beatenBefore": "Beaten Before",
+        "recommended": "Recommended",
+        "platform": "Platform",
+        "releaseYear": "Release Year",
+        "ratingOpencritic": "Rating (OpenCritic)",
+        "steamRating": "Steam Rating",
+        "lengthHours": "Length (Hours)",
+        "gameType": "Game Type",
+        "submit": "Submit",
+        "successAdded": "Rating config saved!",
+        "errorFailed": "Failed to save rating config",
+        "releaseYearInfo": "While lower, older games are more important. The higher, the more important that they be recent. A 50 would be a, doesn't matter.",
+        "lengthHoursInfo": "While lower, shorter games are more important. The higher, the more important that they be longer. A 50 would be a, doesn't matter."
+    },
     "settings": {
         "language": "Language",
         "english": "English",
