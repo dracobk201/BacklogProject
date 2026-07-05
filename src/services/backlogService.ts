@@ -1,5 +1,9 @@
 import { supabase } from '../lib/supabase';
-import type { BacklogItem, UserPreferences } from '../types/database.types';
+import type {
+    BacklogItem,
+    UserScoringWeights,
+    UserPreferences
+} from '../types/database.types';
 
 /**
  * Fetches all backlog games for the currently authenticated user.
@@ -15,9 +19,36 @@ export const getBacklog = async (): Promise<BacklogItem[]> => {
 };
 
 /**
- * Retrieves the user preferences for the currently authenticated user.
+ * Retrieves the scoring weights for the currently authenticated user.
  */
-export const getUserPreferences = async (): Promise<UserPreferences | null> => {
+export const getUserScoringWeights =
+    async (): Promise<UserScoringWeights | null> => {
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
+        if (userError || !user) throw new Error('User not authenticated');
+
+        const { data, error } = await supabase
+            .from('user_scoring_weights')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+
+        // PGRST116 is the error code when no rows are returned, which is fine if preferences aren't set yet.
+        if (error && error.code !== 'PGRST116') {
+            throw new Error(error.message);
+        }
+
+        return data as UserScoringWeights | null;
+    };
+
+/**
+ * Updates or creates the scoring weights for the currently authenticated user.
+ */
+export const updateUserScoringWeights = async (
+    prefs: Partial<UserScoringWeights>
+): Promise<UserScoringWeights> => {
     const {
         data: { user },
         error: userError
@@ -25,23 +56,46 @@ export const getUserPreferences = async (): Promise<UserPreferences | null> => {
     if (userError || !user) throw new Error('User not authenticated');
 
     const { data, error } = await supabase
-        .from('user_preferences')
-        .select('*')
-        .eq('user_id', user.id)
+        .from('user_scoring_weights')
+        .upsert({ user_id: user.id, ...prefs })
+        .select()
         .single();
 
-    // PGRST116 is the error code when no rows are returned, which is fine if preferences aren't set yet.
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
         throw new Error(error.message);
     }
 
-    return data as UserPreferences | null;
+    return data as UserScoringWeights;
 };
 
 /**
- * Updates or creates the user preferences for the currently authenticated user.
+ * Retrieves the general user preferences (language, theme) for the currently authenticated user.
  */
-export const updateUserPreferences = async (
+export const getGeneralUserPreferences =
+    async (): Promise<UserPreferences | null> => {
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
+        if (userError || !user) throw new Error('User not authenticated');
+
+        const { data, error } = await supabase
+            .from('user_preferences')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+
+        if (error && error.code !== 'PGRST116') {
+            throw new Error(error.message);
+        }
+
+        return data as UserPreferences | null;
+    };
+
+/**
+ * Updates or creates the general user preferences for the currently authenticated user.
+ */
+export const updateGeneralUserPreferences = async (
     prefs: Partial<UserPreferences>
 ): Promise<UserPreferences> => {
     const {

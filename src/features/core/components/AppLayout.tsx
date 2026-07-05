@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from '@tanstack/react-router';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { Layout, Menu, theme, Button } from 'antd';
 import {
     BarsOutlined,
@@ -10,6 +10,8 @@ import {
 } from '@ant-design/icons';
 import { supabase } from '../../../supabaseClient';
 import { useTranslation } from 'react-i18next';
+import { getGeneralUserPreferences } from '../../../services/backlogService';
+import { useSettingsStore } from '../../../stores/settingsStore';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -22,6 +24,21 @@ const AppLayout: React.FC = () => {
         token: { colorBgContainer }
     } = theme.useToken();
     const currentYear = new Date().getFullYear();
+    const hydrateFromDb = useSettingsStore((state) => state.hydrateFromDb);
+
+    const { data: preferences } = useQuery({
+        queryKey: ['user-preferences'],
+        queryFn: getGeneralUserPreferences
+    });
+
+    useEffect(() => {
+        if (preferences) {
+            hydrateFromDb({
+                language: preferences.language,
+                theme: preferences.theme
+            });
+        }
+    }, [preferences, hydrateFromDb]);
 
     const items = [
         {
@@ -36,8 +53,16 @@ const AppLayout: React.FC = () => {
             label: t('appLayout.myGames'),
             children: [
                 { key: '2', label: t('appLayout.allMyGames'), to: '/games' },
-                { key: '3', label: t('appLayout.addGame'), to: '/games/add-game' },
-                { key: '4', label: t('appLayout.ratingConfig'), to: '/games/rating-config' }
+                {
+                    key: '3',
+                    label: t('appLayout.addGame'),
+                    to: '/games/add-game'
+                },
+                {
+                    key: '4',
+                    label: t('appLayout.ratingConfig'),
+                    to: '/games/rating-config'
+                }
             ]
         },
         {
@@ -88,6 +113,9 @@ const AppLayout: React.FC = () => {
                 collapsible
                 collapsed={collapsed}
                 onCollapse={(value) => setCollapsed(value)}
+                theme={
+                    useSettingsStore((state) => state.theme) as 'light' | 'dark'
+                }
             >
                 <div
                     style={{
@@ -98,7 +126,11 @@ const AppLayout: React.FC = () => {
                     }}
                 />
                 <Menu
-                    theme="dark"
+                    theme={
+                        useSettingsStore((state) => state.theme) as
+                            | 'light'
+                            | 'dark'
+                    }
                     defaultSelectedKeys={['1']}
                     mode="inline"
                     items={items}
