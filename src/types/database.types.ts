@@ -48,4 +48,5 @@ export interface BacklogItem {
     start_date: string | null;
     completion_date: string | null;
     notes: string | null;
+    deleted_at: string | null;
 }
