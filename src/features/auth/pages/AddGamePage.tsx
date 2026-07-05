@@ -181,7 +181,7 @@ const AddGamePage: React.FC = () => {
             <Form
                 form={form}
                 onFinish={onFinish}
-                labelCol={{ span: 4 }}
+                labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
                 layout="horizontal"
                 style={{ maxWidth: 600 }}
@@ -239,7 +239,10 @@ const AddGamePage: React.FC = () => {
                     label={t('addGame.platform')}
                     name="platform"
                     rules={[
-                        { required: true, message: t('addGame.platformRequired') }
+                        {
+                            required: true,
+                            message: t('addGame.platformRequired')
+                        }
                     ]}
                 >
                     <Cascader options={platformCascaderOptions} />
@@ -277,10 +280,22 @@ const AddGamePage: React.FC = () => {
                 <Form.Item label={t('addGame.status')} name="status">
                     <Select
                         options={[
-                            { label: t('addGame.statusPending'), value: 'pending' },
-                            { label: t('addGame.statusPlaying'), value: 'playing' },
-                            { label: t('addGame.statusCompleted'), value: 'completed' },
-                            { label: t('addGame.statusDropped'), value: 'dropped' }
+                            {
+                                label: t('addGame.statusPending'),
+                                value: 'pending'
+                            },
+                            {
+                                label: t('addGame.statusPlaying'),
+                                value: 'playing'
+                            },
+                            {
+                                label: t('addGame.statusCompleted'),
+                                value: 'completed'
+                            },
+                            {
+                                label: t('addGame.statusDropped'),
+                                value: 'dropped'
+                            }
                         ]}
                         onSelect={(value) => {
                             if (value === 'completed') {

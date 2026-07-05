@@ -1,4 +1,4 @@
-import type { BacklogItem, UserPreferences } from '../types/database.types';
+import type { BacklogItem, UserScoringWeights } from '../types/database.types';
 
 /**
  * Calculates a custom priority score from 0 to 10 for a given backlog item
@@ -10,7 +10,7 @@ import type { BacklogItem, UserPreferences } from '../types/database.types';
  */
 export const calculateCustomPriority = (
     game: BacklogItem,
-    prefs: UserPreferences
+    prefs: UserScoringWeights
 ): number => {
     let rawScore = 0;
     let maxPotentialScore = 0;

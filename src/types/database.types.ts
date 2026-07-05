@@ -5,7 +5,7 @@ export interface Profile {
     avatar_url: string | null;
 }
 
-export interface UserPreferences {
+export interface UserScoringWeights {
     user_id: string;
     weight_excitement: number;
     weight_dropped: number;
@@ -13,6 +13,12 @@ export interface UserPreferences {
     weight_type_aaa: number;
     weight_year_old: number;
     weight_rating: number;
+}
+
+export interface UserPreferences {
+    user_id: string;
+    language: string; // 'en' or 'es'
+    theme: string; // 'light' or 'dark'
 }
 
 export interface BacklogItem {
