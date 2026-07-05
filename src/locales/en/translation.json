@@ -1,0 +1,54 @@
+{
+  "appLayout": {
+    "dashboard": "Dashboard",
+    "myGames": "My Games",
+    "allMyGames": "All My Games",
+    "addGame": "Add Game",
+    "ratingConfig": "Rating Config",
+    "user": "User",
+    "settings": "Settings",
+    "logout": "Log Out",
+    "footer": "Backlog Project ©{{year}}"
+  },
+  "addGame": {
+    "title": "Add a new Game to your backlog",
+    "gameName": "Game Name",
+    "gameNameRequired": "Please input the game name!",
+    "typeGamePlaceholder": "Type a game (e.g. Mario)",
+    "excitement": "Excitement",
+    "dropped": "Dropped",
+    "beatenBefore": "Beaten Before",
+    "recommended": "Recommended",
+    "platform": "Platform",
+    "platformRequired": "Please select a platform!",
+    "releaseYear": "Release Year",
+    "ratingOpencritic": "Rating (OpenCritic)",
+    "steamRating": "Steam Rating",
+    "lengthHours": "Length (Hours)",
+    "gameType": "Game Type",
+    "gameTypeRequired": "Please select a game type!",
+    "status": "Status",
+    "statusPending": "Pending",
+    "statusPlaying": "Playing",
+    "statusCompleted": "Completed",
+    "statusDropped": "Dropped",
+    "startDate": "Start Date",
+    "startDateRequired": "Please input the start date!",
+    "completionDate": "Completion Date",
+    "completionDateRequired": "Please input the completion date!",
+    "notes": "Notes",
+    "submit": "Submit",
+    "successAdded": "Game added to your backlog!",
+    "errorFailed": "Failed to add game"
+  },
+  "games": {
+    "unknownPlatform": "Unknown Platform",
+    "addGame": "Add Game"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  }
+}
