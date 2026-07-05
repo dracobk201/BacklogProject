@@ -17,6 +17,7 @@ import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedGamesIndexRouteImport } from './routes/_authenticated.games.index'
 import { Route as AuthenticatedGamesRatingConfigRouteImport } from './routes/_authenticated.games.rating-config'
 import { Route as AuthenticatedGamesAddGameRouteImport } from './routes/_authenticated.games.add-game'
+import { Route as AuthenticatedGamesEditGameGameIdRouteImport } from './routes/_authenticated.games.edit-game.$gameId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -61,6 +62,12 @@ const AuthenticatedGamesAddGameRoute =
     path: '/games/add-game',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedGamesEditGameGameIdRoute =
+  AuthenticatedGamesEditGameGameIdRouteImport.update({
+    id: '/games/edit-game/$gameId',
+    path: '/games/edit-game/$gameId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/games/': typeof AuthenticatedGamesIndexRoute
   '/profile/': typeof AuthenticatedProfileIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/games/edit-game/$gameId': typeof AuthenticatedGamesEditGameGameIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -79,6 +87,7 @@ export interface FileRoutesByTo {
   '/games': typeof AuthenticatedGamesIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/games/edit-game/$gameId': typeof AuthenticatedGamesEditGameGameIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -90,6 +99,7 @@ export interface FileRoutesById {
   '/_authenticated/games/': typeof AuthenticatedGamesIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/_authenticated/games/edit-game/$gameId': typeof AuthenticatedGamesEditGameGameIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +111,7 @@ export interface FileRouteTypes {
     | '/games/'
     | '/profile/'
     | '/settings/'
+    | '/games/edit-game/$gameId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -110,6 +121,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/profile'
     | '/settings'
+    | '/games/edit-game/$gameId'
   id:
     | '__root__'
     | '/_authenticated'
@@ -120,6 +132,7 @@ export interface FileRouteTypes {
     | '/_authenticated/games/'
     | '/_authenticated/profile/'
     | '/_authenticated/settings/'
+    | '/_authenticated/games/edit-game/$gameId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGamesAddGameRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/games/edit-game/$gameId': {
+      id: '/_authenticated/games/edit-game/$gameId'
+      path: '/games/edit-game/$gameId'
+      fullPath: '/games/edit-game/$gameId'
+      preLoaderRoute: typeof AuthenticatedGamesEditGameGameIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -195,6 +215,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedGamesIndexRoute: typeof AuthenticatedGamesIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
+  AuthenticatedGamesEditGameGameIdRoute: typeof AuthenticatedGamesEditGameGameIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -204,6 +225,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedGamesIndexRoute: AuthenticatedGamesIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
+  AuthenticatedGamesEditGameGameIdRoute: AuthenticatedGamesEditGameGameIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

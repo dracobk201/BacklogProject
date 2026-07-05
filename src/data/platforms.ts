@@ -1,5 +1,76 @@
 export const platformsData = [
     {
+        company: 'PC',
+        consoles: [
+            {
+                id: 'pc_steam',
+                name: 'Steam',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_epic_games',
+                name: 'Epic Games',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_amazon',
+                name: 'Amazon/Luna',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_gog',
+                name: 'GOG',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_ubisoft_connect',
+                name: 'Ubisoft Connect',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_ea_app',
+                name: 'EA App / Origin',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_rockstar_games_launcher',
+                name: 'Rockstar Games Launcher',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_battlenet',
+                name: 'Battle.net',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_itch',
+                name: 'itch.io',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_windows_store',
+                name: 'Windows Store',
+                generation: undefined,
+                releaseYear: undefined
+            },
+            {
+                id: 'pc_other',
+                name: 'Other',
+                generation: undefined,
+                releaseYear: undefined
+            }
+        ]
+    },
+    {
         company: 'Nintendo',
         consoles: [
             {
@@ -220,12 +291,6 @@ export const platformsData = [
     {
         company: 'Other',
         consoles: [
-            {
-                id: 'other_pc',
-                name: 'PC',
-                generation: undefined,
-                releaseYear: undefined
-            },
             {
                 id: 'other_android',
                 name: 'Android',

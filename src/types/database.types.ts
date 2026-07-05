@@ -1,3 +1,5 @@
+import type { GameStatus, GameType } from './addGame.types';
+
 export interface Profile {
     id: string;
     username: string;
@@ -5,14 +7,24 @@ export interface Profile {
     avatar_url: string | null;
 }
 
-export interface UserPreferences {
+export interface UserScoringWeights {
     user_id: string;
     weight_excitement: number;
     weight_dropped: number;
-    weight_type_indie: number;
-    weight_type_aaa: number;
-    weight_year_old: number;
+    weight_beated_before: number;
+    weight_recommended: number;
+    weight_release_year: number;
+    weight_steam_rating: number;
+    weight_length_hours: number;
+    weight_game_type: Record<string, number>;
     weight_rating: number;
+    weight_platform: Record<string, number>;
+}
+
+export interface UserPreferences {
+    user_id: string;
+    language: string;
+    theme: string;
 }
 
 export interface BacklogItem {
@@ -31,9 +43,10 @@ export interface BacklogItem {
     rating: number | null;
     steam_rating: number | null;
     platform: string | null;
-    game_type: 'Indie' | 'AA' | 'AAA' | null;
-    status: 'pending' | 'playing' | 'completed' | 'dropped';
+    game_type: GameType | null;
+    status: GameStatus;
     start_date: string | null;
     completion_date: string | null;
     notes: string | null;
+    deleted_at: string | null;
 }

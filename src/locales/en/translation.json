@@ -1,54 +1,124 @@
 {
-  "appLayout": {
-    "dashboard": "Dashboard",
-    "myGames": "My Games",
-    "allMyGames": "All My Games",
-    "addGame": "Add Game",
-    "ratingConfig": "Rating Config",
-    "user": "User",
-    "settings": "Settings",
-    "logout": "Log Out",
-    "footer": "Backlog Project ©{{year}}"
-  },
-  "addGame": {
-    "title": "Add a new Game to your backlog",
-    "gameName": "Game Name",
-    "gameNameRequired": "Please input the game name!",
-    "typeGamePlaceholder": "Type a game (e.g. Mario)",
-    "excitement": "Excitement",
-    "dropped": "Dropped",
-    "beatenBefore": "Beaten Before",
-    "recommended": "Recommended",
-    "platform": "Platform",
-    "platformRequired": "Please select a platform!",
-    "releaseYear": "Release Year",
-    "ratingOpencritic": "Rating (OpenCritic)",
-    "steamRating": "Steam Rating",
-    "lengthHours": "Length (Hours)",
-    "gameType": "Game Type",
-    "gameTypeRequired": "Please select a game type!",
-    "status": "Status",
-    "statusPending": "Pending",
-    "statusPlaying": "Playing",
-    "statusCompleted": "Completed",
-    "statusDropped": "Dropped",
-    "startDate": "Start Date",
-    "startDateRequired": "Please input the start date!",
-    "completionDate": "Completion Date",
-    "completionDateRequired": "Please input the completion date!",
-    "notes": "Notes",
-    "submit": "Submit",
-    "successAdded": "Game added to your backlog!",
-    "errorFailed": "Failed to add game"
-  },
-  "games": {
-    "unknownPlatform": "Unknown Platform",
-    "addGame": "Add Game"
-  },
-  "login": {
-    "email": "Email",
-    "password": "Password",
-    "signIn": "Sign in",
-    "signUp": "Sign up"
-  }
+    "appLayout": {
+        "dashboard": "Dashboard",
+        "myGames": "My Games",
+        "allMyGames": "All My Games",
+        "addGame": "Add Game",
+        "ratingConfig": "Rating Config",
+        "user": "User",
+        "settings": "Settings",
+        "logout": "Log Out",
+        "footer": "Backlog Project ©{{year}}"
+    },
+    "addGame": {
+        "title": "Add a new Game to your backlog",
+        "gameName": "Game Name",
+        "gameNameRequired": "Please input the game name!",
+        "typeGamePlaceholder": "Type a game (e.g. Mario)",
+        "excitement": "Excitement",
+        "dropped": "Dropped",
+        "beatenBefore": "Beaten Before",
+        "recommended": "Recommended",
+        "platform": "Platform",
+        "platformRequired": "Please select a platform!",
+        "releaseYear": "Release Year",
+        "ratingOpencritic": "Rating (OpenCritic)",
+        "steamRating": "Steam Rating",
+        "lengthHours": "Length (Hours)",
+        "gameType": "Game Type",
+        "gameTypeRequired": "Please select a game type!",
+        "status": "Status",
+        "statusPending": "Pending",
+        "statusPlaying": "Playing",
+        "statusCompleted": "Completed",
+        "statusDropped": "Dropped",
+        "startDate": "Start Date",
+        "startDateRequired": "Please input the start date!",
+        "completionDate": "Completion Date",
+        "completionDateRequired": "Please input the completion date!",
+        "notes": "Notes",
+        "submit": "Submit",
+        "successAdded": "Game added to your backlog!",
+        "errorFailed": "Failed to add game"
+    },
+    "games": {
+        "unknownPlatform": "Unknown Platform",
+        "addGame": "Add Game",
+        "toast": {
+            "updateSuccess": "Game updated successfully",
+            "deleteSuccess": "Game deleted successfully",
+            "errorUpdate": "Error updating game",
+            "errorDelete": "Error deleting game"
+        },
+        "modal": {
+            "updateTitle": "Are you sure you want to edit this game?",
+            "updateContent": "By editing this game, it will be updated in your list.",
+            "updateConfirm": "Yes, edit",
+            "updateCancel": "Cancel",
+            "deleteTitle": "Are you sure you want to delete this game?",
+            "deleteContent": "The game will be deleted from your list.",
+            "confirmDelete": "Yes, delete",
+            "cancelDelete": "Cancel"
+        }
+    },
+    "gameDetailsModal": {
+        "update": "Update",
+        "close": "Close"
+    },
+    "editGame": {
+        "title": "Update the game",
+        "delete": "Delete",
+        "submit": "Update Game",
+        "cancel": "Cancel",
+        "notFound": "Game not found",
+        "back": "Back",
+        "toast": {
+            "updateSuccess": "Game updated successfully",
+            "deleteSuccess": "Game deleted successfully",
+            "errorUpdate": "Error updating game",
+            "errorDelete": "Error deleting game"
+        },
+        "modal": {
+            "updateTitle": "Are you sure you want to edit this game?",
+            "updateContent": "By editing this game, it will be updated in your list.",
+            "updateConfirm": "Yes, edit",
+            "updateCancel": "Cancel",
+            "deleteTitle": "Are you sure you want to delete this game?",
+            "deleteContent": "The game will be deleted from your list.",
+            "confirmDelete": "Yes, delete",
+            "cancelDelete": "Cancel"
+        }
+    },
+    "login": {
+        "email": "Email",
+        "password": "Password",
+        "signIn": "Sign in",
+        "signUp": "Sign up"
+    },
+    "ratingConfig": {
+        "title": "Rating Configuration",
+        "excitement": "Excitement",
+        "dropped": "Dropped",
+        "beatenBefore": "Beaten Before",
+        "recommended": "Recommended",
+        "platform": "Platform",
+        "releaseYear": "Release Year",
+        "ratingOpencritic": "Rating (OpenCritic)",
+        "steamRating": "Steam Rating",
+        "lengthHours": "Length (Hours)",
+        "gameType": "Game Type",
+        "submit": "Submit",
+        "successAdded": "Rating config saved!",
+        "errorFailed": "Failed to save rating config",
+        "releaseYearInfo": "While lower, older games are more important. The higher, the more important that they be recent. A 50 would be a, doesn't matter.",
+        "lengthHoursInfo": "While lower, shorter games are more important. The higher, the more important that they be longer. A 50 would be a, doesn't matter."
+    },
+    "settings": {
+        "language": "Language",
+        "english": "English",
+        "spanish": "Spanish",
+        "italian": "Italian",
+        "darkMode": "Dark Mode",
+        "lightMode": "Light Mode"
+    }
 }
