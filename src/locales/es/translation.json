@@ -1,0 +1,54 @@
+{
+  "appLayout": {
+    "dashboard": "Panel de Control",
+    "myGames": "Mis Juegos",
+    "allMyGames": "Todos Mis Juegos",
+    "addGame": "Añadir Juego",
+    "ratingConfig": "Config. de Calificación",
+    "user": "Usuario",
+    "settings": "Ajustes",
+    "logout": "Cerrar Sesión",
+    "footer": "Backlog Project ©{{year}}"
+  },
+  "addGame": {
+    "title": "Añadir un nuevo Juego a tu backlog",
+    "gameName": "Nombre del Juego",
+    "gameNameRequired": "¡Por favor ingresa el nombre del juego!",
+    "typeGamePlaceholder": "Escribe un juego (ej. Mario)",
+    "excitement": "Entusiasmo",
+    "dropped": "Abandonado",
+    "beatenBefore": "Pasado Antes",
+    "recommended": "Recomendado",
+    "platform": "Plataforma",
+    "platformRequired": "¡Por favor selecciona una plataforma!",
+    "releaseYear": "Año de Lanzamiento",
+    "ratingOpencritic": "Calificación (OpenCritic)",
+    "steamRating": "Calificación de Steam",
+    "lengthHours": "Duración (Horas)",
+    "gameType": "Tipo de Juego",
+    "gameTypeRequired": "¡Por favor selecciona el tipo de juego!",
+    "status": "Estado",
+    "statusPending": "Pendiente",
+    "statusPlaying": "Jugando",
+    "statusCompleted": "Completado",
+    "statusDropped": "Abandonado",
+    "startDate": "Fecha de Inicio",
+    "startDateRequired": "¡Por favor ingresa la fecha de inicio!",
+    "completionDate": "Fecha de Finalización",
+    "completionDateRequired": "¡Por favor ingresa la fecha de finalización!",
+    "notes": "Notas",
+    "submit": "Enviar",
+    "successAdded": "¡Juego añadido a tu backlog!",
+    "errorFailed": "Error al añadir el juego"
+  },
+  "games": {
+    "unknownPlatform": "Plataforma Desconocida",
+    "addGame": "Añadir Juego"
+  },
+  "login": {
+    "email": "Correo",
+    "password": "Contraseña",
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse"
+  }
+}

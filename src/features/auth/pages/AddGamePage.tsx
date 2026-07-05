@@ -30,11 +30,13 @@ import type {
     OpenCriticResults,
     SelectedGameOption
 } from '../../../types/addGame.types';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { TextArea } = Input;
 
 const AddGamePage: React.FC = () => {
+    const { t } = useTranslation();
     const [form] = Form.useForm();
     const [loadingSearchGame, setLoadingSearchGame] = useState<boolean>(false);
     const [coverImageUrl, setCoverImageUrl] = useState<string>('');
@@ -154,16 +156,16 @@ const AddGamePage: React.FC = () => {
             };
 
             await addGameToBacklog(gameData);
-            toast.success('Game added to your backlog!');
+            toast.success(t('addGame.successAdded'));
             form.resetFields();
             setCoverImageUrl('');
             setSelectedGameMeta({ game_id: '', steam_app_id: null });
         } catch (error) {
             console.error('Submit error:', error);
             if (error instanceof Error) {
-                toast.error(error.message || 'Failed to add game');
+                toast.error(error.message || t('addGame.errorFailed'));
             } else {
-                toast.error('Failed to add game');
+                toast.error(t('addGame.errorFailed'));
             }
         } finally {
             setLoadingSearchGame(false);
@@ -173,7 +175,7 @@ const AddGamePage: React.FC = () => {
     return (
         <>
             <Layout>
-                <Title level={2}>Add a new Game to your backlog</Title>
+                <Title level={2}>{t('addGame.title')}</Title>
             </Layout>
 
             <Form
@@ -186,12 +188,12 @@ const AddGamePage: React.FC = () => {
                 initialValues={{ status: 'pending', excitement: 2.5 }}
             >
                 <Form.Item
-                    label="Game Name"
+                    label={t('addGame.gameName')}
                     name="game"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input the game name!'
+                            message: t('addGame.gameNameRequired')
                         }
                     ]}
                 >
@@ -199,7 +201,7 @@ const AddGamePage: React.FC = () => {
                         options={options}
                         onSearch={onSearchGame}
                         onSelect={onSelectGame}
-                        placeholder="Type a game (e.g. Mario)"
+                        placeholder={t('addGame.typeGamePlaceholder')}
                         notFoundContent={
                             loadingSearchGame ? <Spin size="small" /> : null
                         }
@@ -209,58 +211,58 @@ const AddGamePage: React.FC = () => {
                 {coverImageUrl && (
                     <Image width={200} alt="Game" src={coverImageUrl} />
                 )}
-                <Form.Item label="Excitement" name="excitement">
+                <Form.Item label={t('addGame.excitement')} name="excitement">
                     <Rate allowHalf />
                 </Form.Item>
                 <Form.Item
-                    label="Dropped"
+                    label={t('addGame.dropped')}
                     name="dropped"
                     valuePropName="checked"
                 >
                     <Switch />
                 </Form.Item>
                 <Form.Item
-                    label="Beaten Before"
+                    label={t('addGame.beatenBefore')}
                     name="beaten_before"
                     valuePropName="checked"
                 >
                     <Switch />
                 </Form.Item>
                 <Form.Item
-                    label="Recommended"
+                    label={t('addGame.recommended')}
                     name="recommended"
                     valuePropName="checked"
                 >
                     <Switch />
                 </Form.Item>
                 <Form.Item
-                    label="Platform"
+                    label={t('addGame.platform')}
                     name="platform"
                     rules={[
-                        { required: true, message: 'Please select a platform!' }
+                        { required: true, message: t('addGame.platformRequired') }
                     ]}
                 >
                     <Cascader options={platformCascaderOptions} />
                 </Form.Item>
-                <Form.Item label="Release Year" name="release_year">
+                <Form.Item label={t('addGame.releaseYear')} name="release_year">
                     <DatePicker picker="year" disabled />
                 </Form.Item>
-                <Form.Item label="Rating (OpenCritic)" name="rating">
+                <Form.Item label={t('addGame.ratingOpencritic')} name="rating">
                     <InputNumber disabled />
                 </Form.Item>
-                <Form.Item label="Steam Rating" name="steam_rating">
+                <Form.Item label={t('addGame.steamRating')} name="steam_rating">
                     <InputNumber disabled />
                 </Form.Item>
-                <Form.Item label="Length (Hours)" name="length_hours">
+                <Form.Item label={t('addGame.lengthHours')} name="length_hours">
                     <InputNumber disabled />
                 </Form.Item>
                 <Form.Item
-                    label="Game Type"
+                    label={t('addGame.gameType')}
                     name="game_type"
                     rules={[
                         {
                             required: true,
-                            message: 'Please select a game type!'
+                            message: t('addGame.gameTypeRequired')
                         }
                     ]}
                 >
@@ -272,13 +274,13 @@ const AddGamePage: React.FC = () => {
                         ]}
                     />
                 </Form.Item>
-                <Form.Item label="Status" name="status">
+                <Form.Item label={t('addGame.status')} name="status">
                     <Select
                         options={[
-                            { label: 'Pending', value: 'pending' },
-                            { label: 'Playing', value: 'playing' },
-                            { label: 'Completed', value: 'completed' },
-                            { label: 'Dropped', value: 'dropped' }
+                            { label: t('addGame.statusPending'), value: 'pending' },
+                            { label: t('addGame.statusPlaying'), value: 'playing' },
+                            { label: t('addGame.statusCompleted'), value: 'completed' },
+                            { label: t('addGame.statusDropped'), value: 'dropped' }
                         ]}
                         onSelect={(value) => {
                             if (value === 'completed') {
@@ -317,7 +319,7 @@ const AddGamePage: React.FC = () => {
                 {(currentStatus === 'playing' ||
                     currentStatus === 'completed') && (
                     <Form.Item
-                        label="Start Date"
+                        label={t('addGame.startDate')}
                         name="start_date"
                         rules={[
                             {
@@ -326,7 +328,7 @@ const AddGamePage: React.FC = () => {
                                     currentStatus === 'completed'
                                         ? true
                                         : false,
-                                message: 'Please input the start date!'
+                                message: t('addGame.startDateRequired')
                             }
                         ]}
                     >
@@ -335,7 +337,7 @@ const AddGamePage: React.FC = () => {
                 )}
                 {currentStatus === 'completed' && (
                     <Form.Item
-                        label="Completion Date"
+                        label={t('addGame.completionDate')}
                         name="completion_date"
                         rules={[
                             {
@@ -343,20 +345,20 @@ const AddGamePage: React.FC = () => {
                                     currentStatus === 'completed'
                                         ? true
                                         : false,
-                                message: 'Please input the completion date!'
+                                message: t('addGame.completionDateRequired')
                             }
                         ]}
                     >
                         <DatePicker />
                     </Form.Item>
                 )}
-                <Form.Item label="Notes" name="notes">
+                <Form.Item label={t('addGame.notes')} name="notes">
                     <TextArea rows={4} />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        {t('addGame.submit')}
                     </Button>
                 </Form.Item>
             </Form>

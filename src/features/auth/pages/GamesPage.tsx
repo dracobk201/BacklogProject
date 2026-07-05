@@ -6,8 +6,10 @@ import { getBacklog } from '../../../services/backlogService';
 import type { BacklogItem } from '../../../types/database.types';
 import { Meta } from 'antd/es/list/Item';
 import { platformsData } from '../../../data/platforms';
+import { useTranslation } from 'react-i18next';
 
 const GamesPage: React.FC = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [gamesFromBacklog, setGamesFromBacklog] = useState<BacklogItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -30,7 +32,7 @@ const GamesPage: React.FC = () => {
     }, []);
 
     const findConsoleById = (id: string | null) => {
-        if (id == null) return 'Unknown Platform';
+        if (id == null) return t('games.unknownPlatform');
         for (const company of platformsData) {
             const console = company.consoles.find(
                 (console) => console.id === id
@@ -39,7 +41,7 @@ const GamesPage: React.FC = () => {
                 return console.name;
             }
         }
-        return 'Unknown Platform';
+        return t('games.unknownPlatform');
     };
 
     const handleAddGame = () => {
@@ -57,7 +59,7 @@ const GamesPage: React.FC = () => {
     return (
         <Layout>
             <Layout>
-                <Button onClick={handleAddGame}>Add Game</Button>
+                <Button onClick={handleAddGame}>{t('games.addGame')}</Button>
             </Layout>
             <Row gutter={16}>
                 <Col className="gutter-row" span={6}>

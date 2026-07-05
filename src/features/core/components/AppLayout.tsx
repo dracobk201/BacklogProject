@@ -9,41 +9,12 @@ import {
     UserOutlined
 } from '@ant-design/icons';
 import { supabase } from '../../../supabaseClient';
+import { useTranslation } from 'react-i18next';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-    {
-        key: '1',
-        icon: <PieChartOutlined />,
-        label: 'Dashboard',
-        to: '/'
-    },
-    {
-        key: 'sub1',
-        icon: <BarsOutlined />,
-        label: 'My Games',
-        children: [
-            { key: '2', label: 'All My Games', to: '/games' },
-            { key: '3', label: 'Add Game', to: '/games/add-game' },
-            { key: '4', label: 'Rating Config', to: '/games/rating-config' }
-        ]
-    },
-    {
-        key: 'sub2',
-        icon: <UserOutlined />,
-        label: 'User',
-        to: '/profile'
-    },
-    {
-        key: 'sub3',
-        icon: <SettingOutlined />,
-        label: 'Settings',
-        to: '/settings'
-    }
-];
-
 const AppLayout: React.FC = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [collapsed, setCollapsed] = useState(false);
@@ -51,6 +22,37 @@ const AppLayout: React.FC = () => {
         token: { colorBgContainer }
     } = theme.useToken();
     const currentYear = new Date().getFullYear();
+
+    const items = [
+        {
+            key: '1',
+            icon: <PieChartOutlined />,
+            label: t('appLayout.dashboard'),
+            to: '/'
+        },
+        {
+            key: 'sub1',
+            icon: <BarsOutlined />,
+            label: t('appLayout.myGames'),
+            children: [
+                { key: '2', label: t('appLayout.allMyGames'), to: '/games' },
+                { key: '3', label: t('appLayout.addGame'), to: '/games/add-game' },
+                { key: '4', label: t('appLayout.ratingConfig'), to: '/games/rating-config' }
+            ]
+        },
+        {
+            key: 'sub2',
+            icon: <UserOutlined />,
+            label: t('appLayout.user'),
+            to: '/profile'
+        },
+        {
+            key: 'sub3',
+            icon: <SettingOutlined />,
+            label: t('appLayout.settings'),
+            to: '/settings'
+        }
+    ];
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -114,14 +116,14 @@ const AppLayout: React.FC = () => {
                     }}
                 >
                     <Button type="primary" danger onClick={handleLogout}>
-                        Log Out
+                        {t('appLayout.logout')}
                     </Button>
                 </Header>
                 <Content style={{ margin: '0 16px' }}>
                     <Outlet />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    Backlog Project ©{currentYear}
+                    {t('appLayout.footer', { year: currentYear })}
                 </Footer>
             </Layout>
         </Layout>

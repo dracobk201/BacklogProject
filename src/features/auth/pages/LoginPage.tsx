@@ -7,8 +7,10 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '../../../supabaseClient';
 import { useQueryClient } from '@tanstack/react-query';
 import { authQueryOptions } from '../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage: React.FC = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -57,14 +59,14 @@ const LoginPage: React.FC = () => {
                         localization={{
                             variables: {
                                 sign_in: {
-                                    email_label: 'Email',
-                                    password_label: 'Password',
-                                    button_label: 'Sign in'
+                                    email_label: t('login.email'),
+                                    password_label: t('login.password'),
+                                    button_label: t('login.signIn')
                                 },
                                 sign_up: {
-                                    email_label: 'Email',
-                                    password_label: 'Password',
-                                    button_label: 'Sign up'
+                                    email_label: t('login.email'),
+                                    password_label: t('login.password'),
+                                    button_label: t('login.signUp')
                                 }
                             }
                         }}
