@@ -1,6 +1,6 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite + Ant Design + Supabase
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules, using Ant Design for UI and Supabase for backend.
 
 Currently, two official plugins are available:
 

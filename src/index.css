@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Faustina:ital,wght@0,300..800;1,300..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import 'tailwindcss';
 
-@theme {
+:root {
     --color-primary: #ada8b6;
     --color-secondary: #ffeedb;
     --color-danger: #a53860;
@@ -12,4 +11,14 @@
 
     --font-roboto: 'Roboto', sans-serif;
     --font-faustina: 'Faustina', serif;
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
