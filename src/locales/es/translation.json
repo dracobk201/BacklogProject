@@ -43,7 +43,51 @@
     },
     "games": {
         "unknownPlatform": "Plataforma Desconocida",
-        "addGame": "Añadir Juego"
+        "addGame": "Añadir Juego",
+        "toast": {
+            "updateSuccess": "Juego actualizado correctamente",
+            "deleteSuccess": "Juego eliminado de tu lista",
+            "errorUpdate": "Error al actualizar el juego",
+            "errorDelete": "Error al eliminar el juego"
+        },
+        "modal": {
+            "updateTitle": "¿Estás seguro de editar este juego?",
+            "updateContent": "Al editar este juego, se actualizará en tu lista.",
+            "updateConfirm": "Sí, editar",
+            "updateCancel": "Cancelar",
+            "deleteTitle": "¿Estás seguro de eliminar este juego?",
+            "deleteContent": "El juego será eliminado de tu lista.",
+            "confirmDelete": "Sí, eliminar",
+            "cancelDelete": "Cancelar"
+        }
+    },
+    "gameDetailsModal": {
+        "update": "Actualizar",
+        "close": "Cerrar"
+    },
+    "editGame": {
+        "title": "Actualiza el juego",
+        "delete": "Eliminar",
+        "submit": "Actualizar Juego",
+        "cancel": "Cancelar",
+        "notFound": "Juego no encontrado",
+        "back": "Volver",
+        "toast": {
+            "updateSuccess": "Juego actualizado correctamente",
+            "deleteSuccess": "Juego eliminado de tu lista",
+            "errorUpdate": "Error al actualizar el juego",
+            "errorDelete": "Error al eliminar el juego"
+        },
+        "modal": {
+            "updateTitle": "¿Estás seguro de editar este juego?",
+            "updateContent": "Al editar este juego, se actualizará en tu lista.",
+            "updateConfirm": "Sí, editar",
+            "updateCancel": "Cancelar",
+            "deleteTitle": "¿Estás seguro de eliminar este juego?",
+            "deleteContent": "El juego será eliminado de tu lista.",
+            "confirmDelete": "Sí, eliminar",
+            "cancelDelete": "Cancelar"
+        }
     },
     "login": {
         "email": "Correo",

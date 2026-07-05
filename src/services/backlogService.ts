@@ -9,7 +9,10 @@ import type {
  * Fetches all backlog games for the currently authenticated user.
  */
 export const getBacklog = async (): Promise<BacklogItem[]> => {
-    const { data, error } = await supabase.from('backlog').select('*');
+    const { data, error } = await supabase
+        .from('backlog')
+        .select('*')
+        .is('deleted_at', null);
 
     if (error) {
         throw new Error(error.message);
@@ -157,6 +160,64 @@ export const updateGameStatus = async (
     const { data, error } = await supabase
         .from('backlog')
         .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data as BacklogItem;
+};
+
+/**
+ * Retrieves a specific game by its ID.
+ */
+export const getGameById = async (id: string): Promise<BacklogItem | null> => {
+    const { data, error } = await supabase
+        .from('backlog')
+        .select('*')
+        .eq('id', id)
+        .is('deleted_at', null)
+        .single();
+
+    if (error) {
+        if (error.code === 'PGRST116') return null;
+        throw new Error(error.message);
+    }
+
+    return data as BacklogItem;
+};
+
+/**
+ * Fully updates a game's info.
+ */
+export const updateGameInfo = async (
+    id: string,
+    gameData: Partial<BacklogItem>
+): Promise<BacklogItem> => {
+    const { data, error } = await supabase
+        .from('backlog')
+        .update(gameData)
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data as BacklogItem;
+};
+
+/**
+ * Performs a soft delete by setting the deleted_at timestamp.
+ */
+export const softDeleteGame = async (id: string): Promise<BacklogItem> => {
+    const { data, error } = await supabase
+        .from('backlog')
+        .update({ deleted_at: new Date().toISOString() })
         .eq('id', id)
         .select()
         .single();

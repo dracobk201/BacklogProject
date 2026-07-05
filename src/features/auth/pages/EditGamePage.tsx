@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
     Button,
     Cascader,
@@ -9,190 +10,181 @@ import {
     Rate,
     Select,
     Switch,
+    Typography,
+    Modal,
     Image,
-    AutoComplete,
     Spin
 } from 'antd';
-import { Typography } from 'antd';
-import React, { useState, useRef } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { platformCascaderOptions } from '../../../data/platforms';
+import { useParams, useNavigate } from '@tanstack/react-router';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-    searchGamesFromIGDB,
-    getEnrichedGameData
-} from '../../../services/gameApiService';
-import { addGameToBacklog } from '../../../services/backlogService';
+    getGameById,
+    updateGameInfo,
+    softDeleteGame
+} from '../../../services/backlogService';
+import { platformCascaderOptions } from '../../../data/platforms';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
-import type {
-    FormValues,
-    GameStatus,
-    GameType,
-    OpenCriticResults,
-    SelectedGameOption
-} from '../../../types/addGame.types';
+import type { GameStatus, GameType } from '../../../types/addGame.types';
+import type { FormValues } from '../../../types/addGame.types';
 import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { TextArea } = Input;
 
-const AddGamePage: React.FC = () => {
+const EditGamePage: React.FC = () => {
     const { t } = useTranslation();
-    const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const { gameId } = useParams({
+        from: '/_authenticated/games/edit-game/$gameId'
+    });
     const queryClient = useQueryClient();
-    const [coverImageUrl, setCoverImageUrl] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<OpenCriticResults[]>([]);
-    const [options, setOptions] = useState<
-        { value: string; label: string; key: string }[]
-    >([]);
-    const [selectedGameMeta, setSelectedGameMeta] = useState<{
-        game_id: string;
-        steam_app_id: string | null;
-    }>({ game_id: '', steam_app_id: null });
-    const [currentStatus, setCurrentStatus] = useState<string>('pending');
-    const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [form] = Form.useForm();
+    const currentStatus = Form.useWatch('status', form) || 'pending';
 
-    const searchGameMutation = useMutation({
-        mutationFn: (value: string) => searchGamesFromIGDB(value),
-        onSuccess: (results) => {
-            setSearchResults(results);
-            setOptions(
-                results.map((g: OpenCriticResults) => ({
-                    value: g.game_title,
-                    label: `${g.game_title} (${g.release_year || 'N/A'})`,
-                    key: g.game_id
-                }))
-            );
-        },
-        onError: (error) => console.error(error)
+    const { data: game, isLoading } = useQuery({
+        queryKey: ['game', gameId],
+        queryFn: () => getGameById(gameId)
     });
 
-    const enrichGameMutation = useMutation({
-        mutationFn: ({
-            gameId,
-            gameTitle
-        }: {
-            gameId: string;
-            gameTitle: string;
-        }) => getEnrichedGameData(gameId, gameTitle),
-        onSuccess: (enriched, { gameId }) => {
+    useEffect(() => {
+        if (game) {
             form.setFieldsValue({
-                rating: enriched.rating,
-                steam_rating: enriched.steam_rating,
-                length_hours: enriched.length_hours
+                game: game.game_title,
+                excitement: game.excitement,
+                dropped: game.dropped,
+                beaten_before: game.beaten_before,
+                recommended: game.recommended,
+                platform: game.platform ? [game.platform] : undefined,
+                release_year: game.release_year
+                    ? dayjs().year(game.release_year)
+                    : null,
+                rating: game.rating,
+                steam_rating: game.steam_rating,
+                length_hours: game.length_hours,
+                game_type: game.game_type,
+                status: game.status,
+                start_date: game.start_date ? dayjs(game.start_date) : null,
+                completion_date: game.completion_date
+                    ? dayjs(game.completion_date)
+                    : null,
+                notes: game.notes
             });
-            setSelectedGameMeta((prev) => ({
-                ...prev,
-                game_id: enriched.game_id || gameId,
-                steam_app_id: enriched.steam_app_id || prev.steam_app_id || null
-            }));
-            if (enriched.notes) {
-                const currentNotes = form.getFieldValue('notes') || '';
-                form.setFieldsValue({
-                    notes: currentNotes + '\n' + enriched.notes
-                });
-            }
-        },
-        onError: (error) => console.error('Error enriching data:', error)
-    });
-
-    const addGameMutation = useMutation({
-        mutationFn: addGameToBacklog,
-        onSuccess: () => {
-            toast.success(t('addGame.successAdded'));
-            form.resetFields();
-            setCoverImageUrl('');
-            setSelectedGameMeta({ game_id: '', steam_app_id: null });
-            queryClient.invalidateQueries({ queryKey: ['backlog'] });
-        },
-        onError: (error) => {
-            console.error('Submit error:', error);
-            if (error instanceof Error) {
-                toast.error(error.message || t('addGame.errorFailed'));
-            } else {
-                toast.error(t('addGame.errorFailed'));
-            }
         }
-    });
+    }, [game, form]);
 
-    const onSearchGame = (value: string) => {
-        if (!value) {
-            setOptions([]);
-            return;
-        }
-
-        if (searchTimeout.current) clearTimeout(searchTimeout.current);
-
-        searchTimeout.current = setTimeout(() => {
-            searchGameMutation.mutate(value);
-        }, 500); // 500ms
-    };
-
-    const onSelectGame = (value: string, option: SelectedGameOption) => {
-        console.log(value);
-        const gameId = option.key;
-        const game = searchResults.find(
-            (g: OpenCriticResults) => g.game_id === gameId
-        );
-        if (!game) return;
-
-        setCoverImageUrl(game.cover_url || '');
-        form.setFieldsValue({
-            game: game.game_title,
-            release_year: game.release_year
-                ? dayjs().year(game.release_year)
-                : null
-        });
-
-        setSelectedGameMeta({
-            game_id: gameId,
-            steam_app_id: game.steam_app_id || null
-        });
-
-        enrichGameMutation.mutate({ gameId, gameTitle: game.game_title });
-    };
-
-    const onFinish = (values: FormValues) => {
-        const gameData = {
-            game_id: selectedGameMeta.game_id || crypto.randomUUID(),
-            game_title: values.game,
-            steam_app_id: selectedGameMeta.steam_app_id,
-            excitement: values.excitement || 0,
-            dropped: values.dropped || false,
-            beaten_before: values.beaten_before || false,
-            recommended: values.recommended || false,
-            length_hours: values.length_hours || null,
-            release_year: values.release_year
-                ? dayjs(values.release_year).year()
-                : null,
-            rating: values.rating || null,
-            steam_rating: values.steam_rating || null,
-            platform:
+    const updateMutation = useMutation({
+        mutationFn: (values: Partial<FormValues>) => {
+            const platformVal =
                 values.platform && values.platform.length > 1
                     ? values.platform[1]
                     : values.platform
                       ? values.platform[0]
-                      : null,
-            game_type: values.game_type as GameType | null,
-            status: (values.status || 'pending') as GameStatus,
-            start_date: values.start_date
-                ? dayjs(values.start_date).toISOString()
-                : null,
-            completion_date: values.completion_date
-                ? dayjs(values.completion_date).toISOString()
-                : null,
-            notes: values.notes || null,
-            cover_url: coverImageUrl || null,
-            deleted_at: null
-        };
+                      : null;
 
-        addGameMutation.mutate(gameData);
+            return updateGameInfo(gameId, {
+                excitement: values.excitement,
+                dropped: values.dropped,
+                beaten_before: values.beaten_before,
+                recommended: values.recommended,
+                length_hours: values.length_hours,
+                platform: platformVal as string | null,
+                game_type: values.game_type as GameType | null,
+                status: values.status as GameStatus,
+                start_date: values.start_date
+                    ? dayjs(values.start_date).toISOString()
+                    : null,
+                completion_date: values.completion_date
+                    ? dayjs(values.completion_date).toISOString()
+                    : null,
+                notes: values.notes
+            });
+        },
+        onSuccess: () => {
+            toast.success(t('editGame.toast.updateSuccess'));
+            queryClient.invalidateQueries({ queryKey: ['backlog'] });
+            queryClient.invalidateQueries({ queryKey: ['game', gameId] });
+            navigate({ to: '/games' });
+        },
+        onError: (error) => {
+            console.error('Update error:', error);
+            toast.error(t('editGame.toast.errorUpdate'));
+        }
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: () => softDeleteGame(gameId),
+        onSuccess: () => {
+            toast.success(t('editGame.toast.deleteSuccess'));
+            queryClient.invalidateQueries({ queryKey: ['backlog'] });
+            navigate({ to: '/games' });
+        },
+        onError: (error) => {
+            console.error('Delete error:', error);
+            toast.error(t('editGame.toast.errorDelete'));
+        }
+    });
+
+    const onFinish = (values: FormValues) => {
+        Modal.confirm({
+            title: t('editGame.modal.updateTitle'),
+            content: t('editGame.modal.updateContent'),
+            okText: t('editGame.modal.updateConfirm'),
+            cancelText: t('editGame.modal.updateCancel'),
+            onOk: () => {
+                updateMutation.mutate(values);
+            }
+        });
     };
+
+    const handleDelete = () => {
+        Modal.confirm({
+            title: t('editGame.modal.deleteTitle'),
+            content: t('editGame.modal.deleteContent'),
+            okText: t('editGame.modal.confirmDelete'),
+            okType: 'danger',
+            cancelText: t('editGame.modal.cancelDelete'),
+            onOk: () => {
+                deleteMutation.mutate();
+            }
+        });
+    };
+
+    if (isLoading) {
+        return (
+            <Layout style={{ padding: '50px', alignItems: 'center' }}>
+                <Spin size="large" />
+            </Layout>
+        );
+    }
+
+    if (!game) {
+        return (
+            <Layout>
+                <Title level={3}>{t('editGame.notFound')}</Title>
+                <Button onClick={() => navigate({ to: '/games' })}>
+                    {t('editGame.back')}
+                </Button>
+            </Layout>
+        );
+    }
 
     return (
         <>
-            <Layout>
-                <Title level={2}>{t('addGame.title')}</Title>
+            <Layout
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    maxWidth: 600,
+                    marginBottom: 20
+                }}
+            >
+                <Title level={2}>{t('editGame.title')}</Title>
+                <Button danger type="primary" onClick={handleDelete}>
+                    {t('editGame.delete')}
+                </Button>
             </Layout>
 
             <Form
@@ -202,35 +194,17 @@ const AddGamePage: React.FC = () => {
                 wrapperCol={{ span: 14 }}
                 layout="horizontal"
                 style={{ maxWidth: 600 }}
-                initialValues={{ status: 'pending', excitement: 2.5 }}
             >
-                <Form.Item
-                    label={t('addGame.gameName')}
-                    name="game"
-                    rules={[
-                        {
-                            required: true,
-                            message: t('addGame.gameNameRequired')
-                        }
-                    ]}
-                >
-                    <AutoComplete
-                        options={options}
-                        onSearch={onSearchGame}
-                        onSelect={onSelectGame}
-                        placeholder={t('addGame.typeGamePlaceholder')}
-                        notFoundContent={
-                            searchGameMutation.isPending ||
-                            enrichGameMutation.isPending ? (
-                                <Spin size="small" />
-                            ) : null
-                        }
-                    />
+                <Form.Item label={t('addGame.gameName')} name="game">
+                    <Input disabled />
                 </Form.Item>
 
-                {coverImageUrl && (
-                    <Image width={200} alt="Game" src={coverImageUrl} />
+                {game.cover_url && (
+                    <Form.Item wrapperCol={{ offset: 8, span: 14 }}>
+                        <Image width={150} alt="Game" src={game.cover_url} />
+                    </Form.Item>
                 )}
+
                 <Form.Item label={t('addGame.excitement')} name="excitement">
                     <Rate allowHalf />
                 </Form.Item>
@@ -345,12 +319,10 @@ const AddGamePage: React.FC = () => {
                                     beaten_before: false
                                 });
                             }
-                            setCurrentStatus(value);
                         }}
                     />
                 </Form.Item>
 
-                {/* Only show these fields based on the status selected*/}
                 {(currentStatus === 'playing' ||
                     currentStatus === 'completed') && (
                     <Form.Item
@@ -391,13 +363,24 @@ const AddGamePage: React.FC = () => {
                     <TextArea rows={4} />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+                <Form.Item wrapperCol={{ offset: 8, span: 14 }}>
                     <Button
                         type="primary"
                         htmlType="submit"
-                        loading={addGameMutation.isPending}
+                        loading={updateMutation.isPending}
+                        block
                     >
-                        {t('addGame.submit')}
+                        {t('editGame.submit')}
+                    </Button>
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 14 }}>
+                    <Button
+                        type="default"
+                        onClick={() => navigate({ to: '/games' })}
+                        block
+                    >
+                        {t('editGame.cancel')}
                     </Button>
                 </Form.Item>
             </Form>
@@ -405,4 +388,4 @@ const AddGamePage: React.FC = () => {
     );
 };
 
-export default AddGamePage;
+export default EditGamePage;
