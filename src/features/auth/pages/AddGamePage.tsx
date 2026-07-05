@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import { Typography } from 'antd';
 import React, { useState, useRef } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { platformCascaderOptions } from '../../../data/platforms';
 import {
     searchGamesFromIGDB,
@@ -38,7 +39,7 @@ const { TextArea } = Input;
 const AddGamePage: React.FC = () => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
-    const [loadingSearchGame, setLoadingSearchGame] = useState<boolean>(false);
+    const queryClient = useQueryClient();
     const [coverImageUrl, setCoverImageUrl] = useState<string>('');
     const [searchResults, setSearchResults] = useState<OpenCriticResults[]>([]);
     const [options, setOptions] = useState<
@@ -51,6 +52,69 @@ const AddGamePage: React.FC = () => {
     const [currentStatus, setCurrentStatus] = useState<string>('pending');
     const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    const searchGameMutation = useMutation({
+        mutationFn: (value: string) => searchGamesFromIGDB(value),
+        onSuccess: (results) => {
+            setSearchResults(results);
+            setOptions(
+                results.map((g: OpenCriticResults) => ({
+                    value: g.game_title,
+                    label: `${g.game_title} (${g.release_year || 'N/A'})`,
+                    key: g.game_id
+                }))
+            );
+        },
+        onError: (error) => console.error(error)
+    });
+
+    const enrichGameMutation = useMutation({
+        mutationFn: ({
+            gameId,
+            gameTitle
+        }: {
+            gameId: string;
+            gameTitle: string;
+        }) => getEnrichedGameData(gameId, gameTitle),
+        onSuccess: (enriched, { gameId }) => {
+            form.setFieldsValue({
+                rating: enriched.rating,
+                steam_rating: enriched.steam_rating,
+                length_hours: enriched.length_hours
+            });
+            setSelectedGameMeta((prev) => ({
+                ...prev,
+                game_id: enriched.game_id || gameId,
+                steam_app_id: enriched.steam_app_id || prev.steam_app_id || null
+            }));
+            if (enriched.notes) {
+                const currentNotes = form.getFieldValue('notes') || '';
+                form.setFieldsValue({
+                    notes: currentNotes + '\n' + enriched.notes
+                });
+            }
+        },
+        onError: (error) => console.error('Error enriching data:', error)
+    });
+
+    const addGameMutation = useMutation({
+        mutationFn: addGameToBacklog,
+        onSuccess: () => {
+            toast.success(t('addGame.successAdded'));
+            form.resetFields();
+            setCoverImageUrl('');
+            setSelectedGameMeta({ game_id: '', steam_app_id: null });
+            queryClient.invalidateQueries({ queryKey: ['backlog'] });
+        },
+        onError: (error) => {
+            console.error('Submit error:', error);
+            if (error instanceof Error) {
+                toast.error(error.message || t('addGame.errorFailed'));
+            } else {
+                toast.error(t('addGame.errorFailed'));
+            }
+        }
+    });
+
     const onSearchGame = (value: string) => {
         if (!value) {
             setOptions([]);
@@ -59,27 +123,12 @@ const AddGamePage: React.FC = () => {
 
         if (searchTimeout.current) clearTimeout(searchTimeout.current);
 
-        searchTimeout.current = setTimeout(async () => {
-            setLoadingSearchGame(true);
-            try {
-                const results = await searchGamesFromIGDB(value);
-                setSearchResults(results);
-                setOptions(
-                    results.map((g: OpenCriticResults) => ({
-                        value: g.game_title,
-                        label: `${g.game_title} (${g.release_year || 'N/A'})`,
-                        key: g.game_id
-                    }))
-                );
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoadingSearchGame(false);
-            }
+        searchTimeout.current = setTimeout(() => {
+            searchGameMutation.mutate(value);
         }, 500); // 500ms
     };
 
-    const onSelectGame = async (value: string, option: SelectedGameOption) => {
+    const onSelectGame = (value: string, option: SelectedGameOption) => {
         console.log(value);
         const gameId = option.key;
         const game = searchResults.find(
@@ -95,81 +144,48 @@ const AddGamePage: React.FC = () => {
                 : null
         });
 
-        setLoadingSearchGame(true);
-        try {
-            const enriched = await getEnrichedGameData(gameId, game.game_title);
-            form.setFieldsValue({
-                rating: enriched.rating,
-                steam_rating: enriched.steam_rating,
-                length_hours: enriched.length_hours
-            });
-            setSelectedGameMeta({
-                game_id: enriched.game_id || gameId,
-                steam_app_id: enriched.steam_app_id || game.steam_app_id || null
-            });
-            if (enriched.notes) {
-                const currentNotes = form.getFieldValue('notes') || '';
-                form.setFieldsValue({
-                    notes: currentNotes + '\n' + enriched.notes
-                });
-            }
-        } catch (error) {
-            console.error('Error enriching data:', error);
-        } finally {
-            setLoadingSearchGame(false);
-        }
+        setSelectedGameMeta({
+            game_id: gameId,
+            steam_app_id: game.steam_app_id || null
+        });
+
+        enrichGameMutation.mutate({ gameId, gameTitle: game.game_title });
     };
 
-    const onFinish = async (values: FormValues) => {
-        try {
-            setLoadingSearchGame(true);
-            const gameData = {
-                game_id: selectedGameMeta.game_id || crypto.randomUUID(),
-                game_title: values.game,
-                steam_app_id: selectedGameMeta.steam_app_id,
-                excitement: values.excitement || 0,
-                dropped: values.dropped || false,
-                beaten_before: values.beaten_before || false,
-                recommended: values.recommended || false,
-                length_hours: values.length_hours || null,
-                release_year: values.release_year
-                    ? dayjs(values.release_year).year()
-                    : null,
-                rating: values.rating || null,
-                steam_rating: values.steam_rating || null,
-                platform:
-                    values.platform && values.platform.length > 1
-                        ? values.platform[1]
-                        : values.platform
-                          ? values.platform[0]
-                          : null,
-                game_type: values.game_type as GameType | null,
-                status: (values.status || 'pending') as GameStatus,
-                start_date: values.start_date
-                    ? dayjs(values.start_date).toISOString()
-                    : null,
-                completion_date: values.completion_date
-                    ? dayjs(values.completion_date).toISOString()
-                    : null,
-                notes: values.notes || null,
-                cover_url: coverImageUrl || null
-            };
+    const onFinish = (values: FormValues) => {
+        const gameData = {
+            game_id: selectedGameMeta.game_id || crypto.randomUUID(),
+            game_title: values.game,
+            steam_app_id: selectedGameMeta.steam_app_id,
+            excitement: values.excitement || 0,
+            dropped: values.dropped || false,
+            beaten_before: values.beaten_before || false,
+            recommended: values.recommended || false,
+            length_hours: values.length_hours || null,
+            release_year: values.release_year
+                ? dayjs(values.release_year).year()
+                : null,
+            rating: values.rating || null,
+            steam_rating: values.steam_rating || null,
+            platform:
+                values.platform && values.platform.length > 1
+                    ? values.platform[1]
+                    : values.platform
+                      ? values.platform[0]
+                      : null,
+            game_type: values.game_type as GameType | null,
+            status: (values.status || 'pending') as GameStatus,
+            start_date: values.start_date
+                ? dayjs(values.start_date).toISOString()
+                : null,
+            completion_date: values.completion_date
+                ? dayjs(values.completion_date).toISOString()
+                : null,
+            notes: values.notes || null,
+            cover_url: coverImageUrl || null
+        };
 
-            await addGameToBacklog(gameData);
-            toast.success(t('addGame.successAdded'));
-            form.resetFields();
-            setCoverImageUrl('');
-            setSelectedGameMeta({ game_id: '', steam_app_id: null });
-        } catch (error) {
-            console.error('Submit error:', error);
-            if (error instanceof Error) {
-                toast.error(error.message || t('addGame.errorFailed'));
-            } else {
-                toast.error(t('addGame.errorFailed'));
-            }
-        } finally {
-            setLoadingSearchGame(false);
-        }
+        addGameMutation.mutate(gameData);
     };
 
     return (
@@ -203,7 +219,10 @@ const AddGamePage: React.FC = () => {
                         onSelect={onSelectGame}
                         placeholder={t('addGame.typeGamePlaceholder')}
                         notFoundContent={
-                            loadingSearchGame ? <Spin size="small" /> : null
+                            searchGameMutation.isPending ||
+                            enrichGameMutation.isPending ? (
+                                <Spin size="small" />
+                            ) : null
                         }
                     />
                 </Form.Item>
@@ -372,7 +391,11 @@ const AddGamePage: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={addGameMutation.isPending}
+                    >
                         {t('addGame.submit')}
                     </Button>
                 </Form.Item>
