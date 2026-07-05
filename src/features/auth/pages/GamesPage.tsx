@@ -1,35 +1,25 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { Button, Card, Col, Layout, Row, Spin } from 'antd';
-import { useState, useEffect } from 'react';
+import { Button, Card, Col, Layout, Row, Skeleton } from 'antd';
 import { getBacklog } from '../../../services/backlogService';
 import type { BacklogItem } from '../../../types/database.types';
 import { Meta } from 'antd/es/list/Item';
 import { platformsData } from '../../../data/platforms';
 import { useTranslation } from 'react-i18next';
 
+import { useQuery } from '@tanstack/react-query';
+
 const GamesPage: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [gamesFromBacklog, setGamesFromBacklog] = useState<BacklogItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+
+    const { data: gamesFromBacklog = [], isLoading: loading } = useQuery({
+        queryKey: ['backlog'],
+        queryFn: getBacklog
+    });
+
     const unknownGameURL =
         'https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png';
-    useEffect(() => {
-        const fetchGames = async () => {
-            try {
-                const backlog = await getBacklog();
-                console.log(backlog);
-                setGamesFromBacklog(backlog);
-            } catch (error) {
-                console.error('Error fetching backlog:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchGames();
-    }, []);
 
     const findConsoleById = (id: string | null) => {
         if (id == null) return t('games.unknownPlatform');
@@ -51,7 +41,36 @@ const GamesPage: React.FC = () => {
     if (loading) {
         return (
             <Layout>
-                <Spin size="large" />
+                <Layout style={{ marginBottom: 16 }}>
+                    <Button disabled style={{ width: 120 }}>
+                        {t('games.addGame')}
+                    </Button>
+                </Layout>
+                <Row gutter={16}>
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <Col className="gutter-row" span={6} key={index}>
+                            <Card
+                                hoverable
+                                variant="borderless"
+                                style={{ width: 240, height: 350 }}
+                            >
+                                <Skeleton.Image
+                                    active
+                                    style={{
+                                        width: 192,
+                                        height: 200,
+                                        marginBottom: 16
+                                    }}
+                                />
+                                <Skeleton
+                                    active
+                                    paragraph={{ rows: 1 }}
+                                    title={{ width: 100 }}
+                                />
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
             </Layout>
         );
     }
