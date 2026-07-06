@@ -126,18 +126,26 @@ const GamesPage: React.FC = () => {
                     </Button>
                 </div>
                 <Row gutter={[16, 16]}>
-                    {Array.from({ length: 4 }).map((_, index) => (
-                        <Col className="gutter-row" span={6} key={index}>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <Col
+                            className="gutter-row"
+                            xs={24}
+                            sm={12}
+                            md={8}
+                            lg={6}
+                            xl={4}
+                            key={index}
+                        >
                             <Card
                                 hoverable
                                 variant="borderless"
-                                style={{ width: 240, height: 350 }}
+                                style={{ width: '100%', height: '100%' }}
                             >
                                 <Skeleton.Image
                                     active
                                     style={{
-                                        width: 192,
-                                        height: 200,
+                                        width: '100%',
+                                        height: 'auto',
                                         marginBottom: 16
                                     }}
                                 />
@@ -170,16 +178,28 @@ const GamesPage: React.FC = () => {
             <Row gutter={[16, 16]}>
                 {!loading &&
                     processedGames.map((game: BacklogItem) => (
-                        <Col className="gutter-row" span={6} key={game.id}>
+                        <Col
+                            className="gutter-row"
+                            xs={24}
+                            sm={12}
+                            md={8}
+                            lg={6}
+                            xl={4}
+                            key={game.id}
+                        >
                             <Card
                                 hoverable
                                 variant="borderless"
-                                style={{ width: 240 }}
+                                style={{ width: '100%', height: '100%' }}
                                 cover={
                                     <img
                                         draggable={false}
                                         alt={game.game_title}
                                         src={game.cover_url || unknownGameURL}
+                                        style={{
+                                            height: 250,
+                                            objectFit: 'cover'
+                                        }}
                                     />
                                 }
                                 actions={[

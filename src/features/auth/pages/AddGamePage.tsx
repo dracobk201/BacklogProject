@@ -86,12 +86,6 @@ const AddGamePage: React.FC = () => {
                 game_id: enriched.game_id || gameId,
                 steam_app_id: enriched.steam_app_id || prev.steam_app_id || null
             }));
-            if (enriched.notes) {
-                const currentNotes = form.getFieldValue('notes') || '';
-                form.setFieldsValue({
-                    notes: currentNotes + '\n' + enriched.notes
-                });
-            }
         },
         onError: (error) => console.error('Error enriching data:', error)
     });

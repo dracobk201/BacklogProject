@@ -251,7 +251,7 @@ const EditGamePage: React.FC = () => {
                     <InputNumber disabled />
                 </Form.Item>
                 <Form.Item label={t('addGame.lengthHours')} name="length_hours">
-                    <InputNumber disabled />
+                    <InputNumber />
                 </Form.Item>
                 <Form.Item
                     label={t('addGame.gameType')}

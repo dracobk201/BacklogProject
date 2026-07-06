@@ -32,8 +32,8 @@ const searchGamesFromIGDB = async (query: string) => {
     const url = 'https://api.igdb.com/v4/games';
     const body = `
         search "${query}";
-        fields name, first_release_date, category, cover.image_id, external_games.category, external_games.uid;
-        limit 10;
+        fields name, first_release_date, category, cover.image_id, external_games.category, external_games.uid, parent_game, version_parent;
+        limit 50;
     `;
 
     try {
@@ -48,7 +48,21 @@ const searchGamesFromIGDB = async (query: string) => {
         });
 
         if (!response.ok) throw new Error(`IGDB API error: ${response.status}`);
-        const data = await response.json();
+        let data = await response.json();
+
+        // Filter out DLCs, editions, and bundles manually.
+        // IGDB search ignores "where" clauses, so we fetch 50 and filter in-memory.
+        const allowedCategories = [0, 8, 9, 10, 11];
+        data = data.filter((game: any) => {
+            const cat = game.category ?? 0;
+            const isAllowedCat = allowedCategories.includes(cat);
+            const hasParent = game.parent_game != null;
+            const hasVersion = game.version_parent != null;
+            return isAllowedCat && !hasParent && !hasVersion;
+        });
+
+        // Limit to 10 results after filtering
+        data = data.slice(0, 10);
 
         return data.map((game: IGDBGame) => {
             const coverUrl = game.cover?.image_id
@@ -298,9 +312,7 @@ serve(async (req) => {
                 dropped: false,
                 beaten_before: false,
                 recommended: false,
-                notes: exactMatch.cover_url
-                    ? `[CoverURL]: ${exactMatch.cover_url}`
-                    : null
+                notes: null
             };
 
             return new Response(JSON.stringify({ data: enrichedData }), {
