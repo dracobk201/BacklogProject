@@ -38,6 +38,24 @@ const GamesPage: React.FC = () => {
         queryFn: getUserScoringWeights
     });
 
+    const processedGames = React.useMemo(() => {
+        const result = [...gamesFromBacklog];
+
+        // TODO: Apply future filters here
+        // result = result.filter(...)
+
+        // Sort by priority (highest to lowest)
+        if (weights) {
+            result.sort((a, b) => {
+                const priorityA = calculateCustomPriority(a, weights);
+                const priorityB = calculateCustomPriority(b, weights);
+                return priorityB - priorityA;
+            });
+        }
+
+        return result;
+    }, [gamesFromBacklog, weights]);
+
     const unknownGameURL =
         'https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png';
 
@@ -107,7 +125,7 @@ const GamesPage: React.FC = () => {
                         {t('games.addGame')}
                     </Button>
                 </div>
-                <Row gutter={16}>
+                <Row gutter={[16, 16]}>
                     {Array.from({ length: 4 }).map((_, index) => (
                         <Col className="gutter-row" span={6} key={index}>
                             <Card
@@ -149,12 +167,11 @@ const GamesPage: React.FC = () => {
                     {t('games.addGame')}
                 </Button>
             </div>
-            <Row gutter={16}>
-                <Col className="gutter-row" span={6}>
-                    {!loading &&
-                        gamesFromBacklog.map((game: BacklogItem) => (
+            <Row gutter={[16, 16]}>
+                {!loading &&
+                    processedGames.map((game: BacklogItem) => (
+                        <Col className="gutter-row" span={6} key={game.id}>
                             <Card
-                                key={game.id}
                                 hoverable
                                 variant="borderless"
                                 style={{ width: 240 }}
@@ -198,8 +215,8 @@ const GamesPage: React.FC = () => {
                                     description={findConsoleById(game.platform)}
                                 />
                             </Card>
-                        ))}
-                </Col>
+                        </Col>
+                    ))}
             </Row>
 
             <GameDetailsModal
