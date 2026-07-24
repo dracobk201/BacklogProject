@@ -195,7 +195,7 @@ const AddGamePage: React.FC = () => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
                 layout="horizontal"
-                style={{ maxWidth: 600 }}
+                style={{ maxWidth: 600, margin: 'auto' }}
                 initialValues={{ status: 'pending', excitement: 2.5 }}
             >
                 <Form.Item
@@ -223,32 +223,93 @@ const AddGamePage: React.FC = () => {
                 </Form.Item>
 
                 {coverImageUrl && (
-                    <Image width={200} alt="Game" src={coverImageUrl} />
+                    <Form.Item
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Image width={200} alt="Game" src={coverImageUrl} />
+                    </Form.Item>
                 )}
-                <Form.Item label={t('addGame.excitement')} name="excitement">
-                    <Rate allowHalf />
-                </Form.Item>
-                <Form.Item
-                    label={t('addGame.dropped')}
-                    name="dropped"
-                    valuePropName="checked"
+
+                <Layout
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '16px'
+                    }}
                 >
-                    <Switch />
-                </Form.Item>
-                <Form.Item
-                    label={t('addGame.beatenBefore')}
-                    name="beaten_before"
-                    valuePropName="checked"
-                >
-                    <Switch />
-                </Form.Item>
-                <Form.Item
-                    label={t('addGame.recommended')}
-                    name="recommended"
-                    valuePropName="checked"
-                >
-                    <Switch />
-                </Form.Item>
+                    <Layout
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '16px'
+                        }}
+                    >
+                        <Form.Item
+                            label={t('addGame.releaseYear')}
+                            name="release_year"
+                        >
+                            <DatePicker picker="year" disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.ratingOpencritic')}
+                            name="rating"
+                        >
+                            <InputNumber disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.steamRating')}
+                            name="steam_rating"
+                        >
+                            <InputNumber disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.lengthHours')}
+                            name="length_hours"
+                        >
+                            <InputNumber disabled />
+                        </Form.Item>
+                    </Layout>
+                    <Layout
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '16px'
+                        }}
+                    >
+                        <Form.Item
+                            label={t('addGame.excitement')}
+                            name="excitement"
+                        >
+                            <Rate allowHalf />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.dropped')}
+                            name="dropped"
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.beatenBefore')}
+                            name="beaten_before"
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.recommended')}
+                            name="recommended"
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                    </Layout>
+                </Layout>
+
                 <Form.Item
                     label={t('addGame.platform')}
                     name="platform"
@@ -261,18 +322,7 @@ const AddGamePage: React.FC = () => {
                 >
                     <Cascader options={platformCascaderOptions} />
                 </Form.Item>
-                <Form.Item label={t('addGame.releaseYear')} name="release_year">
-                    <DatePicker picker="year" disabled />
-                </Form.Item>
-                <Form.Item label={t('addGame.ratingOpencritic')} name="rating">
-                    <InputNumber disabled />
-                </Form.Item>
-                <Form.Item label={t('addGame.steamRating')} name="steam_rating">
-                    <InputNumber disabled />
-                </Form.Item>
-                <Form.Item label={t('addGame.lengthHours')} name="length_hours">
-                    <InputNumber disabled />
-                </Form.Item>
+
                 <Form.Item
                     label={t('addGame.gameType')}
                     name="game_type"
