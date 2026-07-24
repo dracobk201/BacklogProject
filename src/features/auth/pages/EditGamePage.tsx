@@ -13,7 +13,9 @@ import {
     Typography,
     Modal,
     Image,
-    Spin
+    Spin,
+    Row,
+    Col
 } from 'antd';
 import { useParams, useNavigate } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -178,13 +180,26 @@ const EditGamePage: React.FC = () => {
                 style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    justifyContent: 'center',
                     alignItems: 'center',
                     maxWidth: 600,
+                    margin: 'auto',
                     marginBottom: 20
                 }}
             >
-                <Title level={2}>{t('editGame.title')}</Title>
+                <Title level={2} style={{ margin: 0 }}>
+                    {game.game_title} ({game.release_year})
+                </Title>
+            </Layout>
+
+            <Layout
+                style={{
+                    position: 'fixed',
+                    top: 80,
+                    right: 20,
+                    marginBottom: 20
+                }}
+            >
                 <Button danger type="primary" onClick={handleDelete}>
                     {t('editGame.delete')}
                 </Button>
@@ -196,42 +211,131 @@ const EditGamePage: React.FC = () => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
                 layout="horizontal"
-                style={{ maxWidth: 600 }}
+                style={{ maxWidth: 600, margin: 'auto' }}
             >
-                <Form.Item label={t('addGame.gameName')} name="game">
-                    <Input disabled />
-                </Form.Item>
-
                 {game.cover_url && (
-                    <Form.Item wrapperCol={{ offset: 8, span: 14 }}>
-                        <Image width={150} alt="Game" src={game.cover_url} />
+                    <Form.Item
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Image width={200} alt="Game" src={game.cover_url} />
                     </Form.Item>
                 )}
 
-                <Form.Item label={t('addGame.excitement')} name="excitement">
+                <Form.Item
+                    label={t('addGame.excitement')}
+                    name="excitement"
+                    labelCol={{
+                        flex: '1 1 auto',
+                        style: { textAlign: 'right' }
+                    }}
+                    wrapperCol={{ flex: '0 0 auto' }}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
                     <Rate allowHalf />
                 </Form.Item>
-                <Form.Item
-                    label={t('addGame.dropped')}
-                    name="dropped"
-                    valuePropName="checked"
-                >
-                    <Switch />
-                </Form.Item>
-                <Form.Item
-                    label={t('addGame.beatenBefore')}
-                    name="beaten_before"
-                    valuePropName="checked"
-                >
-                    <Switch />
-                </Form.Item>
-                <Form.Item
-                    label={t('addGame.recommended')}
-                    name="recommended"
-                    valuePropName="checked"
-                >
-                    <Switch />
-                </Form.Item>
+
+                <Row gutter={24} style={{ marginBottom: 16 }}>
+                    <Col span={12}>
+                        <Form.Item
+                            label={t('addGame.dropped')}
+                            name="dropped"
+                            valuePropName="checked"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
+                        >
+                            <Switch />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.beatenBefore')}
+                            name="beaten_before"
+                            valuePropName="checked"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
+                        >
+                            <Switch />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.recommended')}
+                            name="recommended"
+                            valuePropName="checked"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
+                        >
+                            <Switch />
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={12}>
+                        <Form.Item
+                            label={t('addGame.ratingOpencritic')}
+                            name="rating"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <InputNumber
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.steamRating')}
+                            name="steam_rating"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <InputNumber
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.lengthHours')}
+                            name="length_hours"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <InputNumber
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
                 <Form.Item
                     label={t('addGame.platform')}
                     name="platform"
@@ -244,18 +348,7 @@ const EditGamePage: React.FC = () => {
                 >
                     <Cascader options={platformCascaderOptions} />
                 </Form.Item>
-                <Form.Item label={t('addGame.releaseYear')} name="release_year">
-                    <DatePicker picker="year" disabled />
-                </Form.Item>
-                <Form.Item label={t('addGame.ratingOpencritic')} name="rating">
-                    <InputNumber />
-                </Form.Item>
-                <Form.Item label={t('addGame.steamRating')} name="steam_rating">
-                    <InputNumber />
-                </Form.Item>
-                <Form.Item label={t('addGame.lengthHours')} name="length_hours">
-                    <InputNumber />
-                </Form.Item>
+
                 <Form.Item
                     label={t('addGame.gameType')}
                     name="game_type"
