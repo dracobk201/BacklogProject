@@ -11,7 +11,9 @@ import {
     Switch,
     Image,
     AutoComplete,
-    Spin
+    Spin,
+    Row,
+    Col
 } from 'antd';
 import { Typography } from 'antd';
 import React, { useState, useRef } from 'react';
@@ -234,55 +236,20 @@ const AddGamePage: React.FC = () => {
                     </Form.Item>
                 )}
 
-                <Layout
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        gap: '16px'
-                    }}
-                >
-                    <Layout
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '16px'
-                        }}
-                    >
-                        <Form.Item
-                            label={t('addGame.releaseYear')}
-                            name="release_year"
-                        >
-                            <DatePicker picker="year" disabled />
-                        </Form.Item>
-                        <Form.Item
-                            label={t('addGame.ratingOpencritic')}
-                            name="rating"
-                        >
-                            <InputNumber disabled />
-                        </Form.Item>
-                        <Form.Item
-                            label={t('addGame.steamRating')}
-                            name="steam_rating"
-                        >
-                            <InputNumber disabled />
-                        </Form.Item>
-                        <Form.Item
-                            label={t('addGame.lengthHours')}
-                            name="length_hours"
-                        >
-                            <InputNumber disabled />
-                        </Form.Item>
-                    </Layout>
-                    <Layout
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '16px'
-                        }}
-                    >
+                <Row gutter={24} style={{ marginBottom: 16 }}>
+                    <Col span={12}>
                         <Form.Item
                             label={t('addGame.excitement')}
                             name="excitement"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
                         >
                             <Rate allowHalf />
                         </Form.Item>
@@ -290,6 +257,15 @@ const AddGamePage: React.FC = () => {
                             label={t('addGame.dropped')}
                             name="dropped"
                             valuePropName="checked"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
                         >
                             <Switch />
                         </Form.Item>
@@ -297,6 +273,15 @@ const AddGamePage: React.FC = () => {
                             label={t('addGame.beatenBefore')}
                             name="beaten_before"
                             valuePropName="checked"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
                         >
                             <Switch />
                         </Form.Item>
@@ -304,11 +289,77 @@ const AddGamePage: React.FC = () => {
                             label={t('addGame.recommended')}
                             name="recommended"
                             valuePropName="checked"
+                            labelCol={{
+                                flex: '1 1 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '0 0 auto' }}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end'
+                            }}
                         >
                             <Switch />
                         </Form.Item>
-                    </Layout>
-                </Layout>
+                    </Col>
+
+                    <Col span={12}>
+                        <Form.Item
+                            label={t('addGame.releaseYear')}
+                            name="release_year"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <DatePicker
+                                picker="year"
+                                disabled
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.ratingOpencritic')}
+                            name="rating"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <InputNumber
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.steamRating')}
+                            name="steam_rating"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <InputNumber
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label={t('addGame.lengthHours')}
+                            name="length_hours"
+                            labelCol={{
+                                flex: '0 0 auto',
+                                style: { textAlign: 'right' }
+                            }}
+                            wrapperCol={{ flex: '1 1 auto' }}
+                        >
+                            <InputNumber
+                                style={{ width: '100%', maxWidth: 140 }}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
                 <Form.Item
                     label={t('addGame.platform')}
