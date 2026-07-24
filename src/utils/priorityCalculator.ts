@@ -53,17 +53,26 @@ export const calculateCustomPriority = (
     const effectiveReleaseWeight = Math.abs(releaseWeight - 50) * 2;
     addWeight(releaseValueNorm, effectiveReleaseWeight);
 
+    // Helper to check if a rating value is valid (ignores null, undefined, '', and -1)
+    const isValidRating = (val: number | null | undefined): val is number => {
+        if (val === null || val === undefined || (val as unknown) === '')
+            return false;
+        const num = Number(val);
+        return !isNaN(num) && num >= 0 && num !== -1;
+    };
+
     // 6. Opencritic Rating (0-100)
-    const ratingNorm = game.rating
-        ? Math.max(0, Math.min(100, game.rating)) / 100
-        : 0;
-    addWeight(ratingNorm, prefs.weight_rating);
+    if (isValidRating(game.rating)) {
+        const ratingNorm = Math.max(0, Math.min(100, game.rating)) / 100;
+        addWeight(ratingNorm, prefs.weight_rating);
+    }
 
     // 7. Steam Rating (0-100)
-    const steamRatingNorm = game.steam_rating
-        ? Math.max(0, Math.min(100, game.steam_rating)) / 100
-        : 0;
-    addWeight(steamRatingNorm, prefs.weight_steam_rating);
+    if (isValidRating(game.steam_rating)) {
+        const steamRatingNorm =
+            Math.max(0, Math.min(100, game.steam_rating)) / 100;
+        addWeight(steamRatingNorm, prefs.weight_steam_rating);
+    }
 
     // 8. Length Hours
     // 50 = neutral. < 50 = shorter games better. > 50 = longer games better.
@@ -80,12 +89,12 @@ export const calculateCustomPriority = (
 
     // 9. Game Type
     if (game.game_type && prefs.weight_game_type) {
-        const gtWeight = prefs.weight_game_type[game.game_type] ?? 50;
+        const gtWeight = prefs.weight_game_type[game.game_type] ?? 33.3; // Fallback al centro del triángulo
         rawScore += gtWeight;
         maxPotentialScore += 100;
     } else {
-        // Default to neutral (50/100) if not specified
-        rawScore += 50;
+        // Default to center of triangle (33.3/100) if not specified
+        rawScore += 33.3;
         maxPotentialScore += 100;
     }
 
