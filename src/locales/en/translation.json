@@ -44,6 +44,7 @@
     "games": {
         "unknownPlatform": "Unknown Platform",
         "addGame": "Add Game",
+        "showCompleted": "Show Completed Games",
         "toast": {
             "updateSuccess": "Game updated successfully",
             "deleteSuccess": "Game deleted successfully",
