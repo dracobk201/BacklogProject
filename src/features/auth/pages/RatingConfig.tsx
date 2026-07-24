@@ -7,7 +7,7 @@ import {
 } from '../../../services/backlogService';
 import { WeightSlider } from '../components/WeightSlider';
 import { PlatformWeightsTree } from '../components/PlatformWeightsTree';
-import { GameTypeWeightsTree } from '../components/GameTypeWeightsTree';
+import { GameTypeTriangleSlider } from '../components/GameTypeTriangleSlider';
 import type { UserScoringWeights } from '../../../types/database.types';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -89,7 +89,7 @@ const RatingConfig: React.FC = () => {
                         weight_rating: 50,
                         weight_steam_rating: 50,
                         weight_length_hours: 50,
-                        weight_game_type: {},
+                        weight_game_type: { AAA: 33, AA: 33, Indie: 33 },
                         weight_platform: {}
                     }}
                 >
@@ -132,7 +132,7 @@ const RatingConfig: React.FC = () => {
                         label={t('ratingConfig.gameType')}
                         name="weight_game_type"
                     >
-                        <GameTypeWeightsTree />
+                        <GameTypeTriangleSlider />
                     </Form.Item>
 
                     <Form.Item

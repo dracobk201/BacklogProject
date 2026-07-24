@@ -34,6 +34,21 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
         return t('games.unknownPlatform');
     };
 
+    const getStatusLabel = (status: string) => {
+        switch (status?.toLowerCase()) {
+            case 'pending':
+                return t('addGame.statusPending');
+            case 'playing':
+                return t('addGame.statusPlaying');
+            case 'completed':
+                return t('addGame.statusCompleted');
+            case 'dropped':
+                return t('addGame.statusDropped');
+            default:
+                return status;
+        }
+    };
+
     return (
         <Modal
             title={
@@ -72,9 +87,6 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
                 )}
                 <div style={{ flex: 1 }}>
                     <Descriptions column={1} size="small" bordered>
-                        <Descriptions.Item label={t('addGame.status')}>
-                            {game.status}
-                        </Descriptions.Item>
                         <Descriptions.Item label={t('addGame.platform')}>
                             {findConsoleById(game.platform)}
                         </Descriptions.Item>
@@ -88,6 +100,9 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
                             {game.length_hours
                                 ? `${game.length_hours}h`
                                 : 'N/A'}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={t('addGame.status')}>
+                            {getStatusLabel(game.status)}
                         </Descriptions.Item>
                         <Descriptions.Item label={t('addGame.excitement')}>
                             {game.excitement} / 5
