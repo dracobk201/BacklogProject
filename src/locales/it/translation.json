@@ -44,6 +44,7 @@
     "games": {
         "unknownPlatform": "Plataforma Desconocida",
         "addGame": "Añadir Juego",
+        "showCompleted": "Mostrar Juegos Terminados",
         "toast": {
             "updateSuccess": "Juego actualizado correctamente",
             "deleteSuccess": "Juego eliminado de tu lista",

@@ -29,11 +29,74 @@ export const GameTypeTriangleSlider: React.FC<GameTypeTriangleSliderProps> = ({
         boundary: 'polygon'
     });
 
+    const isInternalUpdate = React.useRef(false);
+
     /**
-     * Handle initialization or syncing with DB value
+     * Sync incoming prop `value` to slider handle position (setCenter & setWeights)
+     */
+    useEffect(() => {
+        if (!mixerProps || !mixerProps.nodes || mixerProps.nodes.length < 3) {
+            return;
+        }
+
+        const valAAA = value[GameType.AAA];
+        const valAA = value[GameType.AA];
+        const valIndie = value[GameType.Indie];
+
+        if (
+            valAAA !== undefined ||
+            valAA !== undefined ||
+            valIndie !== undefined
+        ) {
+            const vAAA = valAAA ?? 0;
+            const vAA = valAA ?? 0;
+            const vIndie = valIndie ?? 0;
+            const total = vAAA + vAA + vIndie || 1;
+
+            const w0 = vAAA / total;
+            const w1 = vAA / total;
+            const w2 = vIndie / total;
+
+            const curAAA = weights ? Math.round(weights[0] * 100) : -1;
+            const curAA = weights ? Math.round(weights[1] * 100) : -1;
+            const curIndie = weights ? Math.round(weights[2] * 100) : -1;
+
+            const targetAAA = Math.round(w0 * 100);
+            const targetAA = Math.round(w1 * 100);
+            const targetIndie = Math.round(w2 * 100);
+
+            if (
+                curAAA !== targetAAA ||
+                curAA !== targetAA ||
+                curIndie !== targetIndie
+            ) {
+                const targetX =
+                    w0 * mixerProps.nodes[0][0] +
+                    w1 * mixerProps.nodes[1][0] +
+                    w2 * mixerProps.nodes[2][0];
+                const targetY =
+                    w0 * mixerProps.nodes[0][1] +
+                    w1 * mixerProps.nodes[1][1] +
+                    w2 * mixerProps.nodes[2][1];
+
+                isInternalUpdate.current = true;
+                mixerProps.setCenter({ x: targetX, y: targetY });
+                mixerProps.setWeights([w0, w1, w2]);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value, mixerProps.nodes]);
+
+    /**
+     * Handle user dragging slider handle: emit onChange to parent form
      */
     useEffect(() => {
         if (weights && onChange) {
+            if (isInternalUpdate.current) {
+                isInternalUpdate.current = false;
+                return;
+            }
+
             const [wAAA, wAA, wIndie] = weights;
 
             const newAAA = Math.round(wAAA * 100);

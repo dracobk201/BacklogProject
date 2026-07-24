@@ -1,6 +1,15 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { Button, Card, Col, Layout, Row, Skeleton, Typography } from 'antd';
+import {
+    Button,
+    Card,
+    Col,
+    Layout,
+    Row,
+    Skeleton,
+    Switch,
+    Typography
+} from 'antd';
 import {
     getBacklog,
     getUserScoringWeights,
@@ -27,6 +36,7 @@ const GamesPage: React.FC = () => {
         null
     );
     const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [showCompleted, setShowCompleted] = React.useState(false);
 
     const { data: gamesFromBacklog = [], isLoading: loading } = useQuery({
         queryKey: ['backlog'],
@@ -39,10 +49,11 @@ const GamesPage: React.FC = () => {
     });
 
     const processedGames = React.useMemo(() => {
-        const result = [...gamesFromBacklog];
+        let result = [...gamesFromBacklog];
 
-        // TODO: Apply future filters here
-        // result = result.filter(...)
+        if (!showCompleted) {
+            result = result.filter((game) => !game.completion_date);
+        }
 
         // Sort by priority (highest to lowest)
         if (weights) {
@@ -54,7 +65,7 @@ const GamesPage: React.FC = () => {
         }
 
         return result;
-    }, [gamesFromBacklog, weights]);
+    }, [gamesFromBacklog, weights, showCompleted]);
 
     const unknownGameURL =
         'https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png';
@@ -118,9 +129,27 @@ const GamesPage: React.FC = () => {
                     style={{
                         display: 'flex',
                         justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        gap: 16,
                         marginBottom: 16
                     }}
                 >
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8
+                        }}
+                    >
+                        <Typography.Text>
+                            {t('games.showCompleted')}
+                        </Typography.Text>
+                        <Switch
+                            checked={showCompleted}
+                            onChange={(checked) => setShowCompleted(checked)}
+                            disabled
+                        />
+                    </div>
                     <Button type="primary" disabled style={{ width: 120 }}>
                         {t('games.addGame')}
                     </Button>
@@ -168,9 +197,26 @@ const GamesPage: React.FC = () => {
                 style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    gap: 16,
                     marginBottom: 16
                 }}
             >
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8
+                    }}
+                >
+                    <Typography.Text>
+                        {t('games.showCompleted')}
+                    </Typography.Text>
+                    <Switch
+                        checked={showCompleted}
+                        onChange={(checked) => setShowCompleted(checked)}
+                    />
+                </div>
                 <Button type="primary" onClick={handleAddGame}>
                     {t('games.addGame')}
                 </Button>
@@ -197,7 +243,7 @@ const GamesPage: React.FC = () => {
                                         alt={game.game_title}
                                         src={game.cover_url || unknownGameURL}
                                         style={{
-                                            height: 250,
+                                            height: 325,
                                             objectFit: 'cover'
                                         }}
                                     />
