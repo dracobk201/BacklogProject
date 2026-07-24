@@ -22,7 +22,10 @@ import {
     updateGameInfo,
     softDeleteGame
 } from '../../../services/backlogService';
-import { platformCascaderOptions } from '../../../data/platforms';
+import {
+    platformCascaderOptions,
+    getPlatformCascaderPath
+} from '../../../data/platforms';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import type { GameStatus, GameType } from '../../../types/addGame.types';
@@ -55,7 +58,7 @@ const EditGamePage: React.FC = () => {
                 dropped: game.dropped,
                 beaten_before: game.beaten_before,
                 recommended: game.recommended,
-                platform: game.platform ? [game.platform] : undefined,
+                platform: getPlatformCascaderPath(game.platform),
                 release_year: game.release_year
                     ? dayjs().year(game.release_year)
                     : null,
@@ -245,10 +248,10 @@ const EditGamePage: React.FC = () => {
                     <DatePicker picker="year" disabled />
                 </Form.Item>
                 <Form.Item label={t('addGame.ratingOpencritic')} name="rating">
-                    <InputNumber disabled />
+                    <InputNumber />
                 </Form.Item>
                 <Form.Item label={t('addGame.steamRating')} name="steam_rating">
-                    <InputNumber disabled />
+                    <InputNumber />
                 </Form.Item>
                 <Form.Item label={t('addGame.lengthHours')} name="length_hours">
                     <InputNumber />

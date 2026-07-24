@@ -34,6 +34,21 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
         return t('games.unknownPlatform');
     };
 
+    const getStatusLabel = (status: string) => {
+        switch (status?.toLowerCase()) {
+            case 'pending':
+                return t('addGame.statusPending');
+            case 'playing':
+                return t('addGame.statusPlaying');
+            case 'completed':
+                return t('addGame.statusCompleted');
+            case 'dropped':
+                return t('addGame.statusDropped');
+            default:
+                return status;
+        }
+    };
+
     return (
         <Modal
             title={
@@ -87,7 +102,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
                                 : 'N/A'}
                         </Descriptions.Item>
                         <Descriptions.Item label={t('addGame.status')}>
-                            {game.status.toUpperCase()}
+                            {getStatusLabel(game.status)}
                         </Descriptions.Item>
                         <Descriptions.Item label={t('addGame.excitement')}>
                             {game.excitement} / 5

@@ -6,67 +6,67 @@ export const platformsData = [
                 id: 'pc_steam',
                 name: 'Steam',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2003
             },
             {
                 id: 'pc_epic_games',
                 name: 'Epic Games',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2018
             },
             {
                 id: 'pc_amazon',
                 name: 'Amazon/Luna',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2022
             },
             {
                 id: 'pc_gog',
                 name: 'GOG',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2008
             },
             {
                 id: 'pc_ubisoft_connect',
                 name: 'Ubisoft Connect',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2020
             },
             {
                 id: 'pc_ea_app',
                 name: 'EA App / Origin',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2011
             },
             {
                 id: 'pc_rockstar_games_launcher',
                 name: 'Rockstar Games Launcher',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2019
             },
             {
                 id: 'pc_battlenet',
                 name: 'Battle.net',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 1996
             },
             {
                 id: 'pc_itch',
                 name: 'itch.io',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2013
             },
             {
                 id: 'pc_windows_store',
                 name: 'Windows Store',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 2012
             },
             {
                 id: 'pc_other',
                 name: 'Other',
                 generation: undefined,
-                releaseYear: undefined
+                releaseYear: 1970
             }
         ]
     },
@@ -321,3 +321,23 @@ export const platformCascaderOptions = platformsData.map((companyData) => ({
         label: console.name
     }))
 }));
+
+/**
+ * Given a console id (e.g. 'pc_steam'), returns the full Cascader path array (e.g. ['PC', 'pc_steam'])
+ * so that Ant Design Cascader can select and display the correct option.
+ *
+ * @param consoleId - The console ID (e.g., 'pc_steam', 'nintendo_switch')
+ * @returns An array representing the Cascader option path, or undefined if null/empty
+ */
+export const getPlatformCascaderPath = (
+    consoleId: string | null | undefined
+): string[] | undefined => {
+    if (!consoleId) return undefined;
+    for (const company of platformsData) {
+        const found = company.consoles.find((c) => c.id === consoleId);
+        if (found) {
+            return [company.company, found.id];
+        }
+    }
+    return [consoleId];
+};
