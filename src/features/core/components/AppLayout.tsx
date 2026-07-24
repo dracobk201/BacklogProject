@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Outlet } from '@tanstack/react-router';
+import { useNavigate, useLocation, Outlet } from '@tanstack/react-router';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
-import { Layout, Menu, theme, Button } from 'antd';
+import { Layout, Menu, theme, Button, Dropdown, Grid } from 'antd';
 import {
     BarsOutlined,
     PieChartOutlined,
@@ -14,17 +14,30 @@ import { getGeneralUserPreferences } from '../../../services/backlogService';
 import { useSettingsStore } from '../../../stores/settingsStore';
 
 const { Header, Content, Footer, Sider } = Layout;
+const { useBreakpoint } = Grid;
 
 const AppLayout: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
     const queryClient = useQueryClient();
     const [collapsed, setCollapsed] = useState(false);
+    const screens = useBreakpoint();
+
+    // Determine mobile view when screen width is small (< 768px / md is false)
+    const isMobile = screens.md === false;
+
     const {
-        token: { colorBgContainer }
+        token: {
+            colorBgContainer,
+            colorPrimary,
+            colorTextSecondary,
+            colorBorder
+        }
     } = theme.useToken();
     const currentYear = new Date().getFullYear();
     const hydrateFromDb = useSettingsStore((state) => state.hydrateFromDb);
+    const appTheme = useSettingsStore((state) => state.theme);
 
     const { data: preferences } = useQuery({
         queryKey: ['user-preferences'],
@@ -79,6 +92,17 @@ const AppLayout: React.FC = () => {
         }
     ];
 
+    const getSelectedKey = (pathname: string) => {
+        if (pathname.startsWith('/games/add-game')) return '3';
+        if (pathname.startsWith('/games/rating-config')) return '4';
+        if (pathname.startsWith('/games')) return '2';
+        if (pathname.startsWith('/profile')) return 'sub2';
+        if (pathname.startsWith('/settings')) return 'sub3';
+        return '1';
+    };
+
+    const selectedKey = getSelectedKey(location.pathname);
+
     const handleLogout = async () => {
         await supabase.auth.signOut();
         queryClient.removeQueries({ queryKey: ['auth-session'] });
@@ -109,35 +133,33 @@ const AppLayout: React.FC = () => {
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider
-                collapsible
-                collapsed={collapsed}
-                onCollapse={(value) => setCollapsed(value)}
-                theme={
-                    useSettingsStore((state) => state.theme) as 'light' | 'dark'
-                }
+            {!isMobile && (
+                <Sider
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={(value) => setCollapsed(value)}
+                    theme={appTheme as 'light' | 'dark'}
+                >
+                    <div
+                        style={{
+                            height: 32,
+                            margin: 16,
+                            background: colorBgContainer,
+                            borderRadius: 6
+                        }}
+                    />
+                    <Menu
+                        theme={appTheme as 'light' | 'dark'}
+                        selectedKeys={[selectedKey]}
+                        mode="inline"
+                        items={items}
+                        onClick={handleMenuClick}
+                    />
+                </Sider>
+            )}
+            <Layout
+                style={{ minHeight: '100vh', paddingBottom: isMobile ? 64 : 0 }}
             >
-                <div
-                    style={{
-                        height: 32,
-                        margin: 16,
-                        background: colorBgContainer,
-                        borderRadius: 6
-                    }}
-                />
-                <Menu
-                    theme={
-                        useSettingsStore((state) => state.theme) as
-                            | 'light'
-                            | 'dark'
-                    }
-                    defaultSelectedKeys={['1']}
-                    mode="inline"
-                    items={items}
-                    onClick={handleMenuClick}
-                />
-            </Sider>
-            <Layout>
                 <Header
                     style={{
                         padding: '0 16px',
@@ -151,13 +173,112 @@ const AppLayout: React.FC = () => {
                         {t('appLayout.logout')}
                     </Button>
                 </Header>
-                <Content style={{ margin: '0 16px' }}>
+                <Content style={{ margin: '16px 16px 0 16px' }}>
                     <Outlet />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                     {t('appLayout.footer', { year: currentYear })}
                 </Footer>
             </Layout>
+
+            {/* Mobile Bottom Navigation Bar */}
+            {isMobile && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: 60,
+                        backgroundColor: colorBgContainer,
+                        borderTop: `1px solid ${colorBorder}`,
+                        display: 'flex',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        zIndex: 1000,
+                        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.15)'
+                    }}
+                >
+                    {items.map((item) => {
+                        const isSubActive =
+                            item.children &&
+                            item.children.some(
+                                (child) => child.key === selectedKey
+                            );
+                        const isActive =
+                            item.key === selectedKey || isSubActive;
+
+                        const itemContent = (
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    flex: 1,
+                                    padding: '6px 0',
+                                    color: isActive
+                                        ? colorPrimary
+                                        : colorTextSecondary,
+                                    fontSize: 12,
+                                    fontWeight: isActive ? 600 : 400
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontSize: 18,
+                                        marginBottom: 2
+                                    }}
+                                >
+                                    {item.icon}
+                                </span>
+                                <span>{item.label}</span>
+                            </div>
+                        );
+
+                        if (item.children) {
+                            const dropdownItems = item.children.map(
+                                (child) => ({
+                                    key: child.key,
+                                    label: child.label
+                                })
+                            );
+
+                            return (
+                                <Dropdown
+                                    key={item.key}
+                                    menu={{
+                                        items: dropdownItems,
+                                        onClick: handleMenuClick,
+                                        selectedKeys: [selectedKey]
+                                    }}
+                                    placement="top"
+                                    trigger={['click']}
+                                >
+                                    {itemContent}
+                                </Dropdown>
+                            );
+                        }
+
+                        return (
+                            <div
+                                key={item.key}
+                                onClick={() =>
+                                    handleMenuClick({ key: item.key })
+                                }
+                                style={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                {itemContent}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </Layout>
     );
 };

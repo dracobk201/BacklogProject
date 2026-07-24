@@ -243,7 +243,7 @@ const GamesPage: React.FC = () => {
                                         alt={game.game_title}
                                         src={game.cover_url || unknownGameURL}
                                         style={{
-                                            height: 250,
+                                            height: 325,
                                             objectFit: 'cover'
                                         }}
                                     />
