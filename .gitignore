@@ -37,9 +37,16 @@ coverage/
 .idea
 .DS_Store
 
+# Android Keys & Keystores (Sensitive)
+*.jks
+*.keystore
+key.properties
+key.properties.example
+
 # Ignore root markdown files
 /*.md
 /.*.md
 !README.md
+!ANDROID_MIGRATION_PLAN.md
 
 .tanstack

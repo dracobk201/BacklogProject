@@ -1,22 +1,25 @@
-import { Col, InputNumber, Row, Slider } from 'antd';
 import React from 'react';
 import { GameType } from '../../../types/addGame.types';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 
 export interface GameTypeWeightsTreeProps {
     value?: Record<string, number>;
     onChange?: (value: Record<string, number>) => void;
 }
 
+/**
+ * Weights configuration for Game Types (AAA, AA, Indie).
+ */
 export const GameTypeWeightsTree: React.FC<GameTypeWeightsTreeProps> = ({
     value = {},
     onChange
 }) => {
-    const handleValueChange = (key: string, newValue: number | null) => {
-        const numValue = newValue ?? 50;
+    const handleValueChange = (key: string, newValue: number) => {
         if (onChange) {
             onChange({
                 ...value,
-                [key]: numValue
+                [key]: newValue
             });
         }
     };
@@ -24,41 +27,41 @@ export const GameTypeWeightsTree: React.FC<GameTypeWeightsTreeProps> = ({
     const gameTypes = Object.values(GameType);
 
     return (
-        <div
-            style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px'
-            }}
-        >
+        <div className="space-y-3">
             {gameTypes.map((type) => {
                 const nodeValue = value[type] ?? 50;
+
                 return (
-                    <Row align="middle" gutter={16} key={type}>
-                        <Col
-                            span={8}
-                            style={{ whiteSpace: 'normal', lineHeight: '1.2' }}
-                        >
-                            <strong>{type}</strong>
-                        </Col>
-                        <Col span={10}>
+                    <div
+                        key={type}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg bg-card border border-border/60"
+                    >
+                        <div className="flex items-center justify-between sm:w-1/3">
+                            <Label className="text-xs sm:text-sm font-semibold">
+                                {type}
+                            </Label>
+                            <span className="sm:hidden text-xs font-mono font-bold px-2 py-0.5 rounded bg-muted text-foreground">
+                                {nodeValue}
+                            </span>
+                        </div>
+
+                        <div className="flex-1 flex items-center space-x-3">
                             <Slider
                                 min={1}
                                 max={100}
+                                step={1}
                                 value={nodeValue}
-                                onChange={(val) => handleValueChange(type, val)}
+                                onValueChange={(val) => {
+                                    const num = typeof val === 'number' ? val : (Array.isArray(val) ? val[0] : 50);
+                                    handleValueChange(type, num);
+                                }}
+                                className="flex-1 touch-manipulation cursor-pointer"
                             />
-                        </Col>
-                        <Col span={6}>
-                            <InputNumber
-                                min={1}
-                                max={100}
-                                value={nodeValue}
-                                onChange={(val) => handleValueChange(type, val)}
-                            />
-                        </Col>
-                    </Row>
+                            <span className="hidden sm:inline-block text-xs font-mono font-bold px-2 py-0.5 rounded bg-muted text-foreground min-w-9 text-center border border-border/50">
+                                {nodeValue}
+                            </span>
+                        </div>
+                    </div>
                 );
             })}
         </div>
