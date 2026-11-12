@@ -1,73 +1,88 @@
-# React + TypeScript + Vite + Ant Design + Supabase
+# 🎮 Video Game Backlog Manager (Android & Web)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules, using Ant Design for UI and Supabase for backend.
+Aplicación moderna para la gestión inteligente de backlogs de videojuegos. Su objetivo principal es resolver la parálisis por análisis de los jugadores mediante un algoritmo personalizado de priorización de títulos pendientes.
 
-Currently, two official plugins are available:
+La aplicación está diseñada con un enfoque **mobile-first** y empaquetada para **Android** utilizando **Capacitor**, manteniendo paridad total con su versión web.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🛠️ Stack Tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend Core**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vite.dev/)
+- **Mobile Container**: [Capacitor](https://capacitorjs.com/) (Target: Android)
+- **Sistema de Diseño**: [shadcn/ui](https://ui.shadcn.com/) + [Tailwind CSS](https://tailwindcss.com/)
+- **Iconos**: [Lucide React](https://lucide.dev/)
+- **Routing**: [TanStack Router](https://tanstack.com/router) (Enrutamiento estricto y type-safe)
+- **Data Fetching / Cache**: [TanStack Query v5](https://tanstack.com/query)
+- **Estado Global**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Backend & Auth**: [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, Auth)
+- **Testing**: [Vitest](https://vitest.dev/) y [React Testing Library](https://testing-library.com/)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📋 Plan de Migración a Android
 
-```js
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
+El seguimiento detallado del proceso de migración (Capacitor, sustitución de Ant Design por shadcn/ui, deep linking de Supabase y publicación en Google Play) se encuentra documentado en:
 
-            // Remove tseslint.configs.recommended and replace with this
-            tseslint.configs.recommendedTypeChecked,
-            // Alternatively, use this for stricter rules
-            tseslint.configs.strictTypeChecked,
-            // Optionally, add this for stylistic rules
-            tseslint.configs.stylisticTypeChecked
+👉 **[ANDROID_MIGRATION_PLAN.md](./ANDROID_MIGRATION_PLAN.md)**
 
-            // Other configs...
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname
-            }
-            // other options...
-        }
-    }
-]);
+---
+
+## 🚀 Inicio Rápido (Desarrollo)
+
+### Requisitos Previos
+- Node.js (v20 o superior recomendado)
+- npm
+- [Android Studio](https://developer.android.com/studio) con Android SDK instalado (para compilar y emular en Android)
+
+### Instalación de dependencias
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Ejecutar en modo Web (Vite Dev Server)
+```bash
+npm run dev
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+### Comandos de Calidad y Build
+```bash
+# Validar tipado y linting
+npm run lint
 
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-            // Enable lint rules for React
-            reactX.configs['recommended-typescript'],
-            // Enable lint rules for React DOM
-            reactDom.configs.recommended
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname
-            }
-            // other options...
-        }
-    }
-]);
+# Ejecutar tests unitarios
+npm run test
+
+# Compilar para producción
+npm run build
+```
+
+### Sincronización y Ejecución en Android (Capacitor)
+```bash
+# Sincronizar el build web con el proyecto nativo de Android
+npm run build
+npx cap sync android
+
+# Abrir el proyecto en Android Studio
+npx cap open android
+```
+
+---
+
+## 📱 Estructura del Proyecto
+
+```text
+src/
+├── assets/          # Imágenes y recursos estáticos
+├── components/      # Componentes UI reutilizables (shadcn/ui)
+├── data/            # Listas maestras (plataformas, géneros, etc.)
+├── features/        # Arquitectura modular por dominio funcional
+│   ├── auth/        # Login, perfil, gestión de sesión y usuarios
+│   ├── core/        # Layout principal móvil (BottomNav, Header, etc.)
+│   └── dashboard/   # Dashboard con recomendaciones y backlog
+├── lib/             # Utilidades de configuración (cn, etc.)
+├── routes/          # Rutas de TanStack Router
+├── services/        # Servicios y llamadas a Supabase / APIs
+├── stores/          # Stores de Zustand (ajustes, filtros, etc.)
+└── types/           # Tipados estrictos de TypeScript y Base de Datos
 ```
