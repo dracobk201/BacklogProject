@@ -3,11 +3,24 @@ import { useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { User, Mail, Calendar, LogOut, ShieldAlert, Trash2, AlertTriangle, ExternalLink } from 'lucide-react';
+import {
+    User,
+    Mail,
+    Calendar,
+    LogOut,
+    ShieldAlert,
+    Trash2,
+    AlertTriangle,
+    ExternalLink,
+    Globe,
+    Moon,
+    Sun
+} from 'lucide-react';
 import { ImpactStyle } from '@capacitor/haptics';
 import { supabase } from '../../../supabaseClient';
 import { authQueryOptions } from '../hooks/useAuth';
 import { hapticImpact } from '@/utils/haptics';
+import { useSettingsStore } from '../../../stores/settingsStore';
 import {
     Card,
     CardContent,
@@ -16,6 +29,15 @@ import {
     CardTitle
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
     Dialog,
     DialogContent,
@@ -31,13 +53,15 @@ export interface ProfilePageProps {
 
 /**
  * User Profile Page.
- * Displays user account information, session management, and account deletion options
- * to strictly adhere to Google Play Developer Account Deletion Policy.
+ * Displays user account information, app preferences (language, theme),
+ * session management, and account deletion options to strictly adhere
+ * to Google Play Developer Policies.
  */
 const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { language, theme, setLanguage, setTheme } = useSettingsStore();
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -48,6 +72,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
         hapticImpact(ImpactStyle.Light);
         await supabase.auth.signOut();
         queryClient.removeQueries({ queryKey: ['auth-session'] });
+        queryClient.setQueryData(authQueryOptions.queryKey, null);
         navigate({ to: '/login' });
     };
 
@@ -97,7 +122,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                     {t('profile.title', 'Perfil de Usuario')}
                 </h1>
                 <p className="text-sm text-muted-foreground mt-0.5">
-                    {t('profile.subtitle', 'Información de tu cuenta y perfil de jugador')}
+                    {t('profile.subtitle', 'Información de tu cuenta y preferencias de la aplicación')}
                 </p>
             </div>
 
@@ -147,6 +172,95 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                 </CardContent>
             </Card>
 
+            {/* App Preferences: Language & Theme */}
+            <Card className="border-border">
+                <CardHeader className="p-4 pb-2">
+                    <CardTitle className="text-base font-semibold">
+                        {t('settings.preferences', 'Preferencias de la Aplicación')}
+                    </CardTitle>
+                    <CardDescription className="text-xs text-muted-foreground">
+                        {t('settings.preferencesDescription', 'Personaliza el idioma y la apariencia visual.')}
+                    </CardDescription>
+                </CardHeader>
+
+                <CardContent className="p-4 pt-2 space-y-4">
+                    {/* Language Selector */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="space-y-0.5">
+                            <div className="flex items-center space-x-2">
+                                <Globe className="w-4 h-4 text-muted-foreground" />
+                                <Label className="text-sm font-medium">
+                                    {t('settings.language', 'Idioma')}
+                                </Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {t('settings.selectLanguage', 'Selecciona el idioma de la interfaz')}
+                            </p>
+                        </div>
+
+                        <div className="w-full sm:w-[170px]">
+                            <Select
+                                value={language}
+                                onValueChange={(val) => {
+                                    if (val) {
+                                        hapticImpact(ImpactStyle.Light);
+                                        setLanguage(val);
+                                    }
+                                }}
+                            >
+                                <SelectTrigger className="min-h-11 sm:min-h-[38px] w-full">
+                                    <SelectValue placeholder="Language" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="en">
+                                        🇬🇧 {t('settings.english', 'English')}
+                                    </SelectItem>
+                                    <SelectItem value="es">
+                                        🇪🇸 {t('settings.spanish', 'Español')}
+                                    </SelectItem>
+                                    <SelectItem value="it">
+                                        🇮🇹 {t('settings.italian', 'Italiano')}
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-border/60" />
+
+                    {/* Dark Mode Toggle */}
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="space-y-0.5">
+                            <div className="flex items-center space-x-2">
+                                {theme === 'dark' ? (
+                                    <Moon className="w-4 h-4 text-muted-foreground" />
+                                ) : (
+                                    <Sun className="w-4 h-4 text-muted-foreground" />
+                                )}
+                                <Label htmlFor="profile-dark-mode" className="text-sm font-medium">
+                                    {theme === 'dark'
+                                        ? t('settings.darkMode', 'Modo Oscuro')
+                                        : t('settings.lightMode', 'Modo Claro')}
+                                </Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {t('settings.themeDescription', 'Activa o desactiva el tema visual')}
+                            </p>
+                        </div>
+
+                        <Switch
+                            id="profile-dark-mode"
+                            checked={theme === 'dark'}
+                            onCheckedChange={(checked) => {
+                                hapticImpact(ImpactStyle.Light);
+                                setTheme(checked ? 'dark' : 'light');
+                            }}
+                            className="min-h-[24px]"
+                        />
+                    </div>
+                </CardContent>
+            </Card>
+
             {/* Account Safety Info */}
             <Card className="border-border/60 bg-muted/20">
                 <CardHeader className="p-4 pb-2">
@@ -167,7 +281,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                             href="mailto:support@pakatagames.com?subject=Backlog%20Priority%20-%20Data%20Deletion%20Request"
                             className="inline-flex items-center text-xs text-primary hover:underline gap-1"
                         >
-                            <span>Solicitar eliminación manual de datos</span>
+                            <span>{t('profile.manualDeleteRequest', 'Solicitar eliminación manual de datos')}</span>
                             <ExternalLink className="w-3 h-3" />
                         </a>
                     </div>

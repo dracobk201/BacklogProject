@@ -120,7 +120,10 @@
         "spanish": "Spanish",
         "italian": "Italian",
         "darkMode": "Dark Mode",
-        "lightMode": "Light Mode"
+        "lightMode": "Light Mode",
+        "preferences": "App Preferences",
+        "preferencesDescription": "Customize language and visual appearance.",
+        "selectLanguage": "Select interface language"
     },
     "profile": {
         "title": "User Profile",
