@@ -12,6 +12,7 @@ const corsHeaders = {
 // Access these using Deno.env.get() instead of import.meta.env
 // ==========================================
 const IGDB_CLIENT_ID = Deno.env.get('IGDB_CLIENT_ID') || '';
+const IGDB_CLIENT_SECRET = Deno.env.get('IGDB_CLIENT_SECRET') || '';
 const IGDB_ACCESS_TOKEN = Deno.env.get('IGDB_ACCESS_TOKEN') || '';
 const OPENCRITIC_API_KEY = Deno.env.get('OPENCRITIC_API_KEY') || '';
 
@@ -20,15 +21,74 @@ interface IGDBExternalGame {
     uid: string;
 }
 
-interface IGDBGame {
+interface IGDBRawGame {
     id: number;
     name: string;
     cover?: { image_id: string };
     external_games?: IGDBExternalGame[];
     first_release_date?: number;
+    category?: number;
+    parent_game?: number;
+    version_parent?: number;
 }
 
-const searchGamesFromIGDB = async (query: string) => {
+interface FormattedGameSearchResult {
+    game_id: string;
+    game_title: string;
+    release_year: number | null;
+    cover_url: string | null;
+    steam_app_id: string | null;
+    game_type: null;
+}
+
+let cachedIgdbToken: string | null = null;
+let tokenExpiresAt = 0;
+
+/**
+ * Retrieves a valid IGDB access token.
+ * If IGDB_CLIENT_ID and IGDB_CLIENT_SECRET are configured, it automatically
+ * fetches and caches a new Twitch OAuth token, renewing it before expiration.
+ * Otherwise, falls back to the static IGDB_ACCESS_TOKEN.
+ */
+const getIGDBAccessToken = async (forceRefresh = false): Promise<string> => {
+    if (IGDB_CLIENT_ID && IGDB_CLIENT_SECRET) {
+        const now = Date.now();
+        // Return cached token if still valid (buffer of 5 minutes)
+        if (!forceRefresh && cachedIgdbToken && now < tokenExpiresAt - 300_000) {
+            return cachedIgdbToken;
+        }
+
+        const tokenUrl = `https://id.twitch.tv/oauth2/token?client_id=${encodeURIComponent(
+            IGDB_CLIENT_ID
+        )}&client_secret=${encodeURIComponent(
+            IGDB_CLIENT_SECRET
+        )}&grant_type=client_credentials`;
+
+        const res = await fetch(tokenUrl, { method: 'POST' });
+        if (!res.ok) {
+            const errBody = await res.text();
+            throw new Error(`Failed to obtain Twitch OAuth token (${res.status}): ${errBody}`);
+        }
+
+        const tokenData = await res.json();
+        cachedIgdbToken = tokenData.access_token;
+        tokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
+        return cachedIgdbToken as string;
+    }
+
+    if (IGDB_ACCESS_TOKEN) {
+        return IGDB_ACCESS_TOKEN;
+    }
+
+    throw new Error(
+        'Missing IGDB credentials: configure IGDB_CLIENT_ID and IGDB_CLIENT_SECRET (or IGDB_ACCESS_TOKEN) in Supabase Secrets.'
+    );
+};
+
+const searchGamesFromIGDB = async (
+    query: string,
+    isRetry = false
+): Promise<FormattedGameSearchResult[]> => {
     const url = 'https://api.igdb.com/v4/games';
     const body = `
         search "${query}";
@@ -37,23 +97,30 @@ const searchGamesFromIGDB = async (query: string) => {
     `;
 
     try {
+        const token = await getIGDBAccessToken(isRetry);
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Client-ID': IGDB_CLIENT_ID,
-                Authorization: `Bearer ${IGDB_ACCESS_TOKEN}`
+                Authorization: `Bearer ${token}`
             },
             body
         });
 
+        // If unauthorized and we haven't retried yet and have client secret, refresh and retry once
+        if (response.status === 401 && !isRetry && IGDB_CLIENT_SECRET) {
+            console.warn('IGDB returned 401. Refreshing token and retrying...');
+            return await searchGamesFromIGDB(query, true);
+        }
+
         if (!response.ok) throw new Error(`IGDB API error: ${response.status}`);
-        let data = await response.json();
+        let data: IGDBRawGame[] = await response.json();
 
         // Filter out DLCs, editions, and bundles manually.
         // IGDB search ignores "where" clauses, so we fetch 50 and filter in-memory.
         const allowedCategories = [0, 8, 9, 10, 11];
-        data = data.filter((game: any) => {
+        data = data.filter((game: IGDBRawGame) => {
             const cat = game.category ?? 0;
             const isAllowedCat = allowedCategories.includes(cat);
             const hasParent = game.parent_game != null;
@@ -64,7 +131,7 @@ const searchGamesFromIGDB = async (query: string) => {
         // Limit to 10 results after filtering
         data = data.slice(0, 10);
 
-        return data.map((game: IGDBGame) => {
+        return data.map((game: IGDBRawGame) => {
             const coverUrl = game.cover?.image_id
                 ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
                 : null;
