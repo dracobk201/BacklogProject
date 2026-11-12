@@ -115,12 +115,15 @@
         "lengthHoursInfo": "Mientras más bajo el valor, más importantes son los juegos cortos. Mientras más alto, más importante es que sean más largos. Un 50 sería un, no importa."
     },
     "settings": {
-        "language": "Language / Idioma",
+        "language": "Idioma",
         "english": "Inglés",
         "spanish": "Español",
         "italian": "Italiano",
         "darkMode": "Modo Oscuro",
-        "lightMode": "Modo Claro"
+        "lightMode": "Modo Claro",
+        "preferences": "Preferencias de la Aplicación",
+        "preferencesDescription": "Personaliza el idioma y la apariencia visual.",
+        "selectLanguage": "Selecciona el idioma de la interfaz"
     },
     "profile": {
         "title": "Perfil de Usuario",
