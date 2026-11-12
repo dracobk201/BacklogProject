@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { motion } from 'motion/react';
+import { Capacitor } from '@capacitor/core';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { NotificationType } from '@capacitor/haptics';
 import { supabase } from '../../../supabaseClient';
 import { useQueryClient } from '@tanstack/react-query';
 import { authQueryOptions } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '../../../stores/settingsStore';
+import { hapticNotification } from '@/utils/haptics';
 import {
     Card,
     CardContent,
@@ -31,13 +34,21 @@ const LoginPage: React.FC<LoginPageProps> = ({ className = '' }) => {
     const appTheme = useSettingsStore((state) => state.theme);
 
     useEffect(() => {
+        // 1. Check existing session on mount
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                queryClient.setQueryData(authQueryOptions.queryKey, session);
+                navigate({ to: '/' });
+            }
+        });
+
+        // 2. Listen to auth state transitions
         const {
             data: { subscription }
-        } = supabase.auth.onAuthStateChange(async (event) => {
-            if (event === 'SIGNED_IN') {
-                await queryClient.invalidateQueries({
-                    queryKey: authQueryOptions.queryKey
-                });
+        } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if (session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
+                queryClient.setQueryData(authQueryOptions.queryKey, session);
+                hapticNotification(NotificationType.Success);
                 navigate({ to: '/' });
             }
         });
@@ -90,7 +101,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ className = '' }) => {
                             }}
                             theme={appTheme === 'dark' ? 'dark' : 'default'}
                             providers={['google']}
-                            redirectTo={window.location.origin}
+                            redirectTo={
+                                Capacitor.isNativePlatform()
+                                    ? 'com.pakatagames.backlogpriority://auth/callback'
+                                    : window.location.origin
+                            }
                             localization={{
                                 variables: {
                                     sign_in: {

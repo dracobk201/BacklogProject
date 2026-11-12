@@ -74,7 +74,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ className = '' }) => {
                                     if (val) setLanguage(val);
                                 }}
                             >
-                                <SelectTrigger className="min-h-[44px] sm:min-h-[38px]">
+                                <SelectTrigger className="min-h-11 sm:min-h-[38px]">
                                     <SelectValue placeholder="Idioma" />
                                 </SelectTrigger>
                                 <SelectContent>

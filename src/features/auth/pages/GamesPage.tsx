@@ -143,7 +143,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
 
                     <Button
                         onClick={() => navigate({ to: '/games/add-game' })}
-                        className="h-10 min-h-[44px] text-xs sm:text-sm font-semibold active:scale-95 transition-transform"
+                        className="h-10 min-h-11 text-xs sm:text-sm font-semibold active:scale-95 transition-transform"
                     >
                         <Plus className="w-4 h-4 mr-1.5" />
                         {t('games.addGame')}
@@ -170,7 +170,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                     <Button
                         variant="outline"
                         onClick={() => navigate({ to: '/games/add-game' })}
-                        className="min-h-[44px]"
+                        className="min-h-11"
                     >
                         <Plus className="w-4 h-4 mr-2" />
                         {t('games.addGame')}
@@ -292,7 +292,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                         <Button
                             variant="outline"
                             onClick={() => setGameToDelete(null)}
-                            className="w-full sm:w-auto h-11 sm:h-10 min-h-[44px]"
+                            className="w-full sm:w-auto h-11 sm:h-10 min-h-11"
                         >
                             {t('games.modal.cancelDelete', 'Cancelar')}
                         </Button>
@@ -300,7 +300,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                             variant="destructive"
                             onClick={confirmDelete}
                             disabled={deleteGameMutation.isPending}
-                            className="w-full sm:w-auto h-11 sm:h-10 min-h-[44px] font-semibold"
+                            className="w-full sm:w-auto h-11 sm:h-10 min-h-11 font-semibold"
                         >
                             {t('games.modal.confirmDelete', 'Eliminar')}
                         </Button>

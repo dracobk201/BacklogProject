@@ -117,7 +117,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                         type="button"
                         variant="outline"
                         onClick={handleReset}
-                        className="h-10 min-h-[44px] text-xs font-semibold active:scale-95"
+                        className="h-10 min-h-11 text-xs font-semibold active:scale-95"
                     >
                         <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
                         {t('ratingConfig.reset', 'Restablecer')}
@@ -125,7 +125,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                     <Button
                         type="submit"
                         disabled={mutation.isPending}
-                        className="h-10 min-h-[44px] text-xs font-semibold active:scale-95"
+                        className="h-10 min-h-11 text-xs font-semibold active:scale-95"
                     >
                         <Save className="w-3.5 h-3.5 mr-1.5" />
                         {t('ratingConfig.submit', 'Guardar')}

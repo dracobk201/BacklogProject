@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import React, { useEffect } from 'react';
 import { useSettingsStore } from '../stores/settingsStore';
+import { useSupabaseDeepLinks } from '../features/auth/hooks/useSupabaseDeepLinks';
 
 export interface MyRouterContext {
     queryClient: QueryClient;
@@ -11,6 +12,9 @@ export interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
     component: () => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useSupabaseDeepLinks();
+
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const theme = useSettingsStore((state) => state.theme);
 

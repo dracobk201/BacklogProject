@@ -18,6 +18,8 @@ import {
     getEnrichedGameData
 } from '../../../services/gameApiService';
 import { addGameToBacklog } from '../../../services/backlogService';
+import { hapticNotification, hapticSelection } from '../../../utils/haptics';
+import { NotificationType } from '@capacitor/haptics';
 import type {
     GameStatus,
     GameType,
@@ -117,6 +119,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
     const addGameMutation = useMutation({
         mutationFn: addGameToBacklog,
         onSuccess: () => {
+            hapticNotification(NotificationType.Success);
             toast.success(t('addGame.successAdded'));
             queryClient.invalidateQueries({ queryKey: ['backlog'] });
             navigate({ to: '/games' });
@@ -242,7 +245,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                 onChange={(e) => handleSearchChange(e.target.value)}
                                 onFocus={() => searchResults.length > 0 && setShowSuggestions(true)}
                                 placeholder={t('addGame.typeGamePlaceholder', 'Escribe el nombre del juego...')}
-                                className="min-h-[44px] pr-10 text-sm"
+                                className="min-h-11 pr-10 text-sm"
                                 autoComplete="off"
                             />
                             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -328,7 +331,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                 if (val) setPlatform(val);
                             }}
                         >
-                            <SelectTrigger className="min-h-[44px]">
+                            <SelectTrigger className="min-h-11">
                                 <SelectValue placeholder={t('addGame.platformRequired')} />
                             </SelectTrigger>
                             <SelectContent className="max-h-72">
@@ -361,7 +364,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                     setReleaseYear(e.target.value ? parseInt(e.target.value, 10) : '')
                                 }
                                 placeholder="2024"
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -376,7 +379,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                     setLengthHours(e.target.value ? parseFloat(e.target.value) : '')
                                 }
                                 placeholder="15"
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -391,7 +394,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                     setRating(e.target.value ? parseFloat(e.target.value) : '')
                                 }
                                 placeholder="85"
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -406,7 +409,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                     setSteamRating(e.target.value ? parseFloat(e.target.value) : '')
                                 }
                                 placeholder="90"
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
                     </div>
@@ -423,7 +426,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                     if (val) setGameType(val);
                                 }}
                             >
-                                <SelectTrigger className="min-h-[44px]">
+                                <SelectTrigger className="min-h-11">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -444,7 +447,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                     if (val) setStatus(val);
                                 }}
                             >
-                                <SelectTrigger className="min-h-[44px]">
+                                <SelectTrigger className="min-h-11">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -467,7 +470,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -479,7 +482,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                 type="date"
                                 value={completionDate}
                                 onChange={(e) => setCompletionDate(e.target.value)}
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
                     </div>
@@ -494,9 +497,12 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                 <button
                                     key={starVal}
                                     type="button"
-                                    onClick={() => setExcitement(starVal)}
+                                    onClick={() => {
+                                        hapticSelection();
+                                        setExcitement(starVal);
+                                    }}
                                     aria-label={`Calificar con ${starVal} estrellas`}
-                                    className="p-1.5 rounded-lg hover:bg-muted transition-colors active:scale-95 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                    className="p-1.5 rounded-lg hover:bg-muted transition-colors active:scale-95 touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
                                 >
                                     <Star
                                         className={`w-7 h-7 transition-colors ${
@@ -569,14 +575,14 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                     type="button"
                     variant="outline"
                     onClick={() => navigate({ to: '/games' })}
-                    className="w-full sm:w-auto flex-1 h-12 min-h-[48px] text-sm font-semibold active:scale-95"
+                    className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-semibold active:scale-95"
                 >
                     {t('common.cancel', 'Cancelar')}
                 </Button>
                 <Button
                     type="submit"
                     disabled={addGameMutation.isPending}
-                    className="w-full sm:w-auto flex-1 h-12 min-h-[48px] text-sm font-bold active:scale-95 shadow-md"
+                    className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-bold active:scale-95 shadow-md"
                 >
                     <Plus className="w-4 h-4 mr-2" />
                     {t('addGame.submit')}

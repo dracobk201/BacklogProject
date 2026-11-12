@@ -121,5 +121,21 @@
         "italian": "Italiano",
         "darkMode": "Modo Oscuro",
         "lightMode": "Modo Claro"
+    },
+    "profile": {
+        "title": "Profilo Utente",
+        "subtitle": "Informazioni sul tuo account e profilo di gioco",
+        "memberSince": "Membro da",
+        "dataSecurity": "Sicurezza e Privacy",
+        "securityNotice": "I tuoi dati e la tua libreria di giochi sono crittografati e archiviati in modo sicuro su Supabase.",
+        "dangerZone": "Zona di Pericolo",
+        "deleteAccount": "Elimina Account",
+        "deleteAccountDesc": "Elimina definitivamente il tuo account e tutti i dati associati.",
+        "deleteAccountConfirmTitle": "Sei sicuro di voler eliminare il tuo account?",
+        "deleteAccountConfirmDesc": "Questa azione non può essere annullata. Tutti i tuoi giochi salvati, valutazioni, preferenze e credenziali verranno cancellati definitivamente.",
+        "deleteAccountConfirmBtn": "Sì, elimina il mio account",
+        "deleteAccountCancelBtn": "Annulla",
+        "deleteAccountSuccess": "Il tuo account è stato eliminato.",
+        "deleteAccountError": "Impossibile eliminare l'account. Riprova o contatta il supporto."
     }
 }

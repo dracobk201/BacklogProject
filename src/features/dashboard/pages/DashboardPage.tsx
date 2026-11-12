@@ -100,7 +100,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
 
                 <Button
                     onClick={() => navigate({ to: '/games/add-game' })}
-                    className="w-full sm:w-auto h-11 sm:h-10 min-h-[44px] text-sm font-semibold active:scale-95 transition-transform"
+                    className="w-full sm:w-auto h-11 sm:h-10 min-h-11 text-sm font-semibold active:scale-95 transition-transform"
                 >
                     <Plus className="w-4 h-4 mr-2" />
                     {t('appLayout.addGame')}
@@ -245,7 +245,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                             <div className="w-full sm:w-auto flex sm:flex-col gap-2 shrink-0">
                                 <Button
                                     onClick={() => navigate({ to: '/games' })}
-                                    className="flex-1 sm:flex-initial h-10 min-h-[44px] text-xs font-semibold"
+                                    className="flex-1 sm:flex-initial h-10 min-h-11 text-xs font-semibold"
                                 >
                                     {t('dashboard.viewInGames', 'Ver en Catálogo')}
                                     <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -260,7 +260,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                             <Button
                                 variant="outline"
                                 onClick={() => navigate({ to: '/games/add-game' })}
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             >
                                 <Plus className="w-4 h-4 mr-2" />
                                 {t('appLayout.addGame')}

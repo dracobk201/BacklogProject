@@ -6,6 +6,8 @@ import { getGeneralUserPreferences } from '../../../services/backlogService';
 import { useSettingsStore } from '../../../stores/settingsStore';
 import AppHeader from './AppHeader';
 import BottomNav from './BottomNav';
+import { useAndroidBackButton } from '../hooks/useAndroidBackButton';
+import { useStatusBarSync } from '../hooks/useStatusBarSync';
 
 export interface AppLayoutProps {
     className?: string;
@@ -21,6 +23,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ className = '' }) => {
     const currentYear = new Date().getFullYear();
     const hydrateFromDb = useSettingsStore((state) => state.hydrateFromDb);
     const appTheme = useSettingsStore((state) => state.theme);
+
+    // Synchronize native Android hardware and status bar
+    useAndroidBackButton();
+    useStatusBarSync(appTheme);
 
     const { data: preferences } = useQuery({
         queryKey: ['user-preferences'],

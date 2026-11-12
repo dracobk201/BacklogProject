@@ -8,6 +8,7 @@ import {
     SlidersHorizontal,
     User
 } from 'lucide-react';
+import { hapticSelection } from '../../../utils/haptics';
 
 export interface BottomNavProps {
     className?: string;
@@ -87,8 +88,11 @@ const BottomNav: React.FC<BottomNavProps> = ({ className = '' }) => {
                         <button
                             key={item.key}
                             type="button"
-                            onClick={() => navigate({ to: item.to })}
-                            className={`flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] py-1 px-1 transition-all duration-150 active:scale-95 touch-manipulation ${
+                            onClick={() => {
+                                hapticSelection();
+                                navigate({ to: item.to });
+                            }}
+                            className={`flex flex-col items-center justify-center flex-1 h-full min-h-11 min-w-[44px] py-1 px-1 transition-all duration-150 active:scale-95 touch-manipulation ${
                                 active
                                     ? 'text-primary font-semibold'
                                     : 'text-muted-foreground hover:text-foreground'

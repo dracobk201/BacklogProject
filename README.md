@@ -1,88 +1,93 @@
-# 🎮 Video Game Backlog Manager (Android & Web)
+# 🎮 Backlog Priority (Android & Web)
 
-Aplicación moderna para la gestión inteligente de backlogs de videojuegos. Su objetivo principal es resolver la parálisis por análisis de los jugadores mediante un algoritmo personalizado de priorización de títulos pendientes.
+A modern, mobile-first application designed to intelligently organize video game backlogs and eliminate gamer analysis paralysis through a personalized priority algorithm.
 
-La aplicación está diseñada con un enfoque **mobile-first** y empaquetada para **Android** utilizando **Capacitor**, manteniendo paridad total con su versión web.
+Packaged as a native **Android** application using **Capacitor** with full web parity.
+
+- **Application Name**: Backlog Priority
+- **Android Package ID**: `com.pakatagames.backlogpriority`
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Technology Stack
 
 - **Frontend Core**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vite.dev/)
-- **Mobile Container**: [Capacitor](https://capacitorjs.com/) (Target: Android)
-- **Sistema de Diseño**: [shadcn/ui](https://ui.shadcn.com/) + [Tailwind CSS](https://tailwindcss.com/)
-- **Iconos**: [Lucide React](https://lucide.dev/)
-- **Routing**: [TanStack Router](https://tanstack.com/router) (Enrutamiento estricto y type-safe)
-- **Data Fetching / Cache**: [TanStack Query v5](https://tanstack.com/query)
-- **Estado Global**: [Zustand](https://zustand-demo.pmnd.rs/)
-- **Backend & Auth**: [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, Auth)
-- **Testing**: [Vitest](https://vitest.dev/) y [React Testing Library](https://testing-library.com/)
+- **Mobile Container**: [Capacitor](https://capacitorjs.com/) (Target: Android `/android`)
+- **Design System**: [shadcn/ui](https://ui.shadcn.com/) + [Tailwind CSS v4](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Routing**: [TanStack Router](https://tanstack.com/router) (Strict, type-safe routing)
+- **Data Fetching & Cache**: [TanStack Query v5](https://tanstack.com/query)
+- **Global State**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Backend & Auth**: [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, Authentication)
+- **Testing**: [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/)
 
 ---
 
-## 📋 Plan de Migración a Android
+## 📋 Android Migration Roadmap
 
-El seguimiento detallado del proceso de migración (Capacitor, sustitución de Ant Design por shadcn/ui, deep linking de Supabase y publicación en Google Play) se encuentra documentado en:
+The migration plan tracking progress across Capacitor configuration, shadcn/ui migration, mobile hardware UX, Supabase deep links, and Google Play Store deployment is documented in:
 
 👉 **[ANDROID_MIGRATION_PLAN.md](./ANDROID_MIGRATION_PLAN.md)**
 
 ---
 
-## 🚀 Inicio Rápido (Desarrollo)
+## 🚀 Quick Start (Development)
 
-### Requisitos Previos
-- Node.js (v20 o superior recomendado)
+### Prerequisites
+- Node.js (v20 or higher recommended)
 - npm
-- [Android Studio](https://developer.android.com/studio) con Android SDK instalado (para compilar y emular en Android)
+- [Android Studio](https://developer.android.com/studio) with Android SDK and command-line tools installed
 
-### Instalación de dependencias
+### Install Dependencies
 ```bash
 npm install
 ```
 
-### Ejecutar en modo Web (Vite Dev Server)
+### Run in Web Development Mode (Vite Dev Server)
 ```bash
 npm run dev
 ```
 
-### Comandos de Calidad y Build
+### Quality & Build Commands
 ```bash
-# Validar tipado y linting
+# Type-check and linting
 npm run lint
 
-# Ejecutar tests unitarios
+# Run unit tests
 npm run test
 
-# Compilar para producción
+# Production build
 npm run build
 ```
 
-### Sincronización y Ejecución en Android (Capacitor)
+### Android Native Execution & Sync (Capacitor)
 ```bash
-# Sincronizar el build web con el proyecto nativo de Android
+# Compile web assets and sync with native Android project
 npm run build
 npx cap sync android
 
-# Abrir el proyecto en Android Studio
+# Open Android Studio project
 npx cap open android
 ```
 
 ---
 
-## 📱 Estructura del Proyecto
+## 📱 Project Structure
 
 ```text
 src/
-├── assets/          # Imágenes y recursos estáticos
-├── components/      # Componentes UI reutilizables (shadcn/ui)
-├── data/            # Listas maestras (plataformas, géneros, etc.)
-├── features/        # Arquitectura modular por dominio funcional
-│   ├── auth/        # Login, perfil, gestión de sesión y usuarios
-│   ├── core/        # Layout principal móvil (BottomNav, Header, etc.)
-│   └── dashboard/   # Dashboard con recomendaciones y backlog
-├── lib/             # Utilidades de configuración (cn, etc.)
-├── routes/          # Rutas de TanStack Router
-├── services/        # Servicios y llamadas a Supabase / APIs
-├── stores/          # Stores de Zustand (ajustes, filtros, etc.)
-└── types/           # Tipados estrictos de TypeScript y Base de Datos
+├── assets/          # Static images and media assets
+├── components/      # Shared design system components (shadcn/ui)
+│   └── ui/          # Atomic UI primitives (button, card, dialog, etc.)
+├── data/            # Master reference datasets (platforms, consoles, genres)
+├── features/        # Feature-oriented domain modules
+│   ├── auth/        # Authentication, profile, settings, game forms & catalog
+│   ├── core/        # Layout, AppHeader, mobile BottomNav, safe areas
+│   └── dashboard/   # Metrics, recommendation engine, priority calculator
+├── lib/             # Utility helpers (cn, utils)
+├── locales/         # Multi-language translation dictionaries (en, es, it)
+├── routes/          # TanStack Router type-safe file-based routes
+├── services/        # Backend services (Supabase queries & IGDB/OpenCritic APIs)
+├── stores/          # Zustand global stores (settings, user preferences)
+└── types/           # TypeScript strict interfaces and Database schemas
 ```

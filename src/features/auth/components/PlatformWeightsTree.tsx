@@ -55,7 +55,7 @@ export const PlatformWeightsTree: React.FC<PlatformWeightsTreeProps> = ({
                         <button
                             type="button"
                             onClick={() => toggleCompany(companyGroup.company)}
-                            className="w-full flex items-center justify-between p-3.5 bg-muted/30 hover:bg-muted/50 transition-colors text-left font-bold text-sm touch-manipulation min-h-[44px]"
+                            className="w-full flex items-center justify-between p-3.5 bg-muted/30 hover:bg-muted/50 transition-colors text-left font-bold text-sm touch-manipulation min-h-11"
                         >
                             <div className="flex items-center space-x-2">
                                 <Gamepad2 className="w-4 h-4 text-primary" />
@@ -83,7 +83,7 @@ export const PlatformWeightsTree: React.FC<PlatformWeightsTreeProps> = ({
                                             className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 p-2 rounded-lg hover:bg-muted/30 transition-colors"
                                         >
                                             <div className="flex items-center justify-between sm:w-2/5">
-                                                <Label className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[200px]">
+                                                <Label className="text-xs sm:text-sm font-medium text-foreground truncate max-w-50">
                                                     {consoleItem.name}
                                                 </Label>
                                                 <span className="sm:hidden text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-muted text-foreground">
@@ -103,7 +103,7 @@ export const PlatformWeightsTree: React.FC<PlatformWeightsTreeProps> = ({
                                                     }}
                                                     className="flex-1 touch-manipulation cursor-pointer"
                                                 />
-                                                <span className="hidden sm:inline-block text-xs font-mono font-bold px-2 py-0.5 rounded bg-muted text-foreground min-w-[36px] text-center border border-border/50">
+                                                <span className="hidden sm:inline-block text-xs font-mono font-bold px-2 py-0.5 rounded bg-muted text-foreground min-w-9 text-center border border-border/50">
                                                     {nodeValue}
                                                 </span>
                                             </div>

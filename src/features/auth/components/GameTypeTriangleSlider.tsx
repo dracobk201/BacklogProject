@@ -121,7 +121,7 @@ export const GameTypeTriangleSlider: React.FC<GameTypeTriangleSliderProps> = ({
 
     return (
         <div className="w-full flex flex-col items-center my-4">
-            <div className="relative w-[260px] h-[260px]">
+            <div className="relative w-65 h-65">
                 {/* Labels */}
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 font-bold text-xs">
                     AAA

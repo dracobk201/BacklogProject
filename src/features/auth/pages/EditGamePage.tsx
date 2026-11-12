@@ -16,6 +16,8 @@ import {
     updateGameInfo,
     softDeleteGame
 } from '../../../services/backlogService';
+import { hapticNotification, hapticSelection } from '../../../utils/haptics';
+import { NotificationType } from '@capacitor/haptics';
 import type {
     GameStatus,
     GameType
@@ -99,6 +101,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
             return updateGameInfo(gameId, values);
         },
         onSuccess: () => {
+            hapticNotification(NotificationType.Success);
             toast.success(t('games.toast.updateSuccess'));
             queryClient.invalidateQueries({ queryKey: ['backlog'] });
             queryClient.invalidateQueries({ queryKey: ['game', gameId] });
@@ -112,6 +115,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
     const deleteMutation = useMutation({
         mutationFn: () => softDeleteGame(gameId),
         onSuccess: () => {
+            hapticNotification(NotificationType.Warning);
             toast.success(t('games.toast.deleteSuccess'));
             queryClient.invalidateQueries({ queryKey: ['backlog'] });
             navigate({ to: '/games' });
@@ -159,7 +163,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                         type="button"
                         variant="ghost"
                         onClick={() => navigate({ to: '/games' })}
-                        className="h-10 w-10 p-0 rounded-full min-h-[44px] min-w-[44px]"
+                        className="h-10 w-10 p-0 rounded-full min-h-11 min-w-11"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Button>
@@ -177,7 +181,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                     type="button"
                     variant="outline"
                     onClick={() => setIsDeleteDialogOpen(true)}
-                    className="text-destructive hover:bg-destructive/10 border-border h-10 min-h-[44px]"
+                    className="text-destructive hover:bg-destructive/10 border-border h-10 min-h-11"
                 >
                     <Trash2 className="w-4 h-4 sm:mr-1.5" />
                     <span className="hidden sm:inline">{t('common.delete', 'Eliminar')}</span>
@@ -202,7 +206,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                             id="game-name"
                             value={titleInput}
                             onChange={(e) => setTitleInput(e.target.value)}
-                            className="min-h-[44px] text-sm"
+                            className="min-h-11 text-sm"
                         />
                     </div>
 
@@ -228,7 +232,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 value={coverImageUrl}
                                 onChange={(e) => setCoverImageUrl(e.target.value)}
                                 placeholder="https://..."
-                                className="min-h-[40px] text-xs"
+                                className="min-h-10 text-xs"
                             />
                         </div>
                     </div>
@@ -244,7 +248,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 if (val) setPlatform(val);
                             }}
                         >
-                            <SelectTrigger className="min-h-[44px]">
+                            <SelectTrigger className="min-h-11">
                                 <SelectValue placeholder={t('addGame.platformRequired')} />
                             </SelectTrigger>
                             <SelectContent className="max-h-72">
@@ -276,7 +280,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 onChange={(e) =>
                                     setReleaseYear(e.target.value ? parseInt(e.target.value, 10) : '')
                                 }
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -290,7 +294,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 onChange={(e) =>
                                     setLengthHours(e.target.value ? parseFloat(e.target.value) : '')
                                 }
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -304,7 +308,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 onChange={(e) =>
                                     setRating(e.target.value ? parseFloat(e.target.value) : '')
                                 }
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -318,7 +322,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 onChange={(e) =>
                                     setSteamRating(e.target.value ? parseFloat(e.target.value) : '')
                                 }
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
                     </div>
@@ -335,7 +339,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                     if (val) setGameType(val);
                                 }}
                             >
-                                <SelectTrigger className="min-h-[44px]">
+                                <SelectTrigger className="min-h-11">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -356,7 +360,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                     if (val) setStatus(val);
                                 }}
                             >
-                                <SelectTrigger className="min-h-[44px]">
+                                <SelectTrigger className="min-h-11">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -379,7 +383,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
 
@@ -391,7 +395,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 type="date"
                                 value={completionDate}
                                 onChange={(e) => setCompletionDate(e.target.value)}
-                                className="min-h-[44px]"
+                                className="min-h-11"
                             />
                         </div>
                     </div>
@@ -406,9 +410,12 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                                 <button
                                     key={starVal}
                                     type="button"
-                                    onClick={() => setExcitement(starVal)}
+                                    onClick={() => {
+                                        hapticSelection();
+                                        setExcitement(starVal);
+                                    }}
                                     aria-label={`Calificar con ${starVal} estrellas`}
-                                    className="p-1.5 rounded-lg hover:bg-muted transition-colors active:scale-95 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                    className="p-1.5 rounded-lg hover:bg-muted transition-colors active:scale-95 touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
                                 >
                                     <Star
                                         className={`w-7 h-7 transition-colors ${
@@ -481,14 +488,14 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                     type="button"
                     variant="outline"
                     onClick={() => navigate({ to: '/games' })}
-                    className="w-full sm:w-auto flex-1 h-12 min-h-[48px] text-sm font-semibold active:scale-95"
+                    className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-semibold active:scale-95"
                 >
                     {t('common.cancel', 'Cancelar')}
                 </Button>
                 <Button
                     type="submit"
                     disabled={updateMutation.isPending}
-                    className="w-full sm:w-auto flex-1 h-12 min-h-[48px] text-sm font-bold active:scale-95 shadow-md"
+                    className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-bold active:scale-95 shadow-md"
                 >
                     <Save className="w-4 h-4 mr-2" />
                     {t('gameDetailsModal.update', 'Actualizar')}
@@ -516,7 +523,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                         <Button
                             variant="outline"
                             onClick={() => setIsDeleteDialogOpen(false)}
-                            className="w-full sm:w-auto h-11 sm:h-10 min-h-[44px]"
+                            className="w-full sm:w-auto h-11 sm:h-10 min-h-11"
                         >
                             {t('games.modal.cancelDelete', 'Cancelar')}
                         </Button>
@@ -524,7 +531,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                             variant="destructive"
                             onClick={() => deleteMutation.mutate()}
                             disabled={deleteMutation.isPending}
-                            className="w-full sm:w-auto h-11 sm:h-10 min-h-[44px] font-semibold"
+                            className="w-full sm:w-auto h-11 sm:h-10 min-h-11 font-semibold"
                         >
                             {t('games.modal.confirmDelete', 'Eliminar')}
                         </Button>

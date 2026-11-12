@@ -57,7 +57,7 @@ export const GameTypeWeightsTree: React.FC<GameTypeWeightsTreeProps> = ({
                                 }}
                                 className="flex-1 touch-manipulation cursor-pointer"
                             />
-                            <span className="hidden sm:inline-block text-xs font-mono font-bold px-2 py-0.5 rounded bg-muted text-foreground min-w-[36px] text-center border border-border/50">
+                            <span className="hidden sm:inline-block text-xs font-mono font-bold px-2 py-0.5 rounded bg-muted text-foreground min-w-9 text-center border border-border/50">
                                 {nodeValue}
                             </span>
                         </div>

@@ -121,5 +121,21 @@
         "italian": "Italian",
         "darkMode": "Dark Mode",
         "lightMode": "Light Mode"
+    },
+    "profile": {
+        "title": "User Profile",
+        "subtitle": "Your account information and gaming profile",
+        "memberSince": "Member since",
+        "dataSecurity": "Security & Privacy",
+        "securityNotice": "Your data and game backlog are encrypted and backed up securely in Supabase.",
+        "dangerZone": "Danger Zone",
+        "deleteAccount": "Delete Account",
+        "deleteAccountDesc": "Permanently delete your account and all associated data.",
+        "deleteAccountConfirmTitle": "Are you sure you want to delete your account?",
+        "deleteAccountConfirmDesc": "This action cannot be undone. All your saved backlog games, ratings, preferences, and account credentials will be permanently erased.",
+        "deleteAccountConfirmBtn": "Yes, delete my account",
+        "deleteAccountCancelBtn": "Cancel",
+        "deleteAccountSuccess": "Your account has been deleted.",
+        "deleteAccountError": "Could not delete account. Please try again or contact support."
     }
 }
