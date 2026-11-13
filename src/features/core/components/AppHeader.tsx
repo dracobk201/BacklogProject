@@ -139,7 +139,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className = '' }) => {
                         type="button"
                         onClick={() => navigate({ to: '/games/add-game' })}
                         aria-label={t('appLayout.addGame')}
-                        className="flex items-center justify-center h-9 px-3 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 active:scale-95 transition-all touch-manipulation min-w-[36px]"
+                        className="flex items-center justify-center h-9 px-3 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 active:scale-95 transition-all touch-manipulation min-w-9"
                     >
                         <Plus className="w-4 h-4 md:mr-1.5" />
                         <span className="hidden md:inline">{t('appLayout.addGame')}</span>

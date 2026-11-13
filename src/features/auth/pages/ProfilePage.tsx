@@ -99,17 +99,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
             await supabase.auth.signOut();
             queryClient.clear();
 
-            toast.success(t('profile.deleteAccountSuccess', 'Tu cuenta ha sido eliminada.'));
+            toast.success(t('profile.deleteAccountSuccess'));
             setIsDialogOpen(false);
             navigate({ to: '/login' });
         } catch (err) {
             console.error('Account deletion error:', err);
-            toast.error(
-                t(
-                    'profile.deleteAccountError',
-                    'No se pudo eliminar la cuenta. Inténtalo de nuevo o contacta a soporte.'
-                )
-            );
+            toast.error(t('profile.deleteAccountError'));
         } finally {
             setIsDeleting(false);
         }
@@ -119,10 +114,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
         <div className={`space-y-6 max-w-2xl mx-auto py-2 ${className}`}>
             <div>
                 <h1 className="text-2xl font-bold tracking-tight">
-                    {t('profile.title', 'Perfil de Usuario')}
+                    {t('profile.title')}
                 </h1>
                 <p className="text-sm text-muted-foreground mt-0.5">
-                    {t('profile.subtitle', 'Información de tu cuenta y preferencias de la aplicación')}
+                    {t('profile.subtitle')}
                 </p>
             </div>
 
@@ -152,7 +147,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                             <div className="flex items-center space-x-2">
                                 <Calendar className="w-3.5 h-3.5" />
                                 <span>
-                                    {t('profile.memberSince', 'Miembro desde')}:{' '}
+                                    {t('profile.memberSince')}:{' '}
                                     {new Date(user.created_at).toLocaleDateString()}
                                 </span>
                             </div>
@@ -176,10 +171,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
             <Card className="border-border">
                 <CardHeader className="p-4 pb-2">
                     <CardTitle className="text-base font-semibold">
-                        {t('settings.preferences', 'Preferencias de la Aplicación')}
+                        {t('settings.preferences')}
                     </CardTitle>
                     <CardDescription className="text-xs text-muted-foreground">
-                        {t('settings.preferencesDescription', 'Personaliza el idioma y la apariencia visual.')}
+                        {t('settings.preferencesDescription')}
                     </CardDescription>
                 </CardHeader>
 
@@ -190,11 +185,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                             <div className="flex items-center space-x-2">
                                 <Globe className="w-4 h-4 text-muted-foreground" />
                                 <Label className="text-sm font-medium">
-                                    {t('settings.language', 'Idioma')}
+                                    {t('settings.language')}
                                 </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                {t('settings.selectLanguage', 'Selecciona el idioma de la interfaz')}
+                                {t('settings.selectLanguage')}
                             </p>
                         </div>
 
@@ -209,17 +204,17 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                                 }}
                             >
                                 <SelectTrigger className="min-h-11 sm:min-h-[38px] w-full">
-                                    <SelectValue placeholder="Language" />
+                                    <SelectValue placeholder={t('settings.language')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="en">
-                                        🇬🇧 {t('settings.english', 'English')}
+                                        🇬🇧 {t('settings.english')}
                                     </SelectItem>
                                     <SelectItem value="es">
-                                        🇪🇸 {t('settings.spanish', 'Español')}
+                                        🇪🇸 {t('settings.spanish')}
                                     </SelectItem>
                                     <SelectItem value="it">
-                                        🇮🇹 {t('settings.italian', 'Italiano')}
+                                        🇮🇹 {t('settings.italian')}
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
@@ -239,12 +234,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                                 )}
                                 <Label htmlFor="profile-dark-mode" className="text-sm font-medium">
                                     {theme === 'dark'
-                                        ? t('settings.darkMode', 'Modo Oscuro')
-                                        : t('settings.lightMode', 'Modo Claro')}
+                                        ? t('settings.darkMode')
+                                        : t('settings.lightMode')}
                                 </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                {t('settings.themeDescription', 'Activa o desactiva el tema visual')}
+                                {t('settings.themeDescription')}
                             </p>
                         </div>
 
@@ -266,22 +261,19 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                 <CardHeader className="p-4 pb-2">
                     <div className="flex items-center space-x-2 text-xs font-semibold text-muted-foreground">
                         <ShieldAlert className="w-4 h-4" />
-                        <span>{t('profile.dataSecurity', 'Seguridad y Privacidad')}</span>
+                        <span>{t('profile.dataSecurity')}</span>
                     </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-0 space-y-2">
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                        {t(
-                            'profile.securityNotice',
-                            'Tus datos y biblioteca de videojuegos están cifrados y respaldados en la nube con Supabase.'
-                        )}
+                        {t('profile.securityNotice')}
                     </p>
                     <div className="pt-1">
                         <a
                             href="mailto:support@pakatagames.com?subject=Backlog%20Priority%20-%20Data%20Deletion%20Request"
                             className="inline-flex items-center text-xs text-primary hover:underline gap-1"
                         >
-                            <span>{t('profile.manualDeleteRequest', 'Solicitar eliminación manual de datos')}</span>
+                            <span>{t('profile.manualDeleteRequest')}</span>
                             <ExternalLink className="w-3 h-3" />
                         </a>
                     </div>
@@ -293,16 +285,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                 <CardHeader className="p-4 pb-2">
                     <div className="flex items-center space-x-2 text-xs font-semibold text-destructive">
                         <AlertTriangle className="w-4 h-4" />
-                        <span>{t('profile.dangerZone', 'Zona de Peligro')}</span>
+                        <span>{t('profile.dangerZone')}</span>
                     </div>
                     <CardTitle className="text-base font-semibold text-destructive mt-1">
-                        {t('profile.deleteAccount', 'Eliminar Cuenta')}
+                        {t('profile.deleteAccount')}
                     </CardTitle>
                     <CardDescription className="text-xs text-muted-foreground">
-                        {t(
-                            'profile.deleteAccountDesc',
-                            'Elimina permanentemente tu cuenta y todos los datos asociados de forma irreversible.'
-                        )}
+                        {t('profile.deleteAccountDesc')}
                     </CardDescription>
                 </CardHeader>
 
@@ -316,7 +305,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                         }}
                     >
                         <Trash2 className="w-4 h-4 mr-2" />
-                        {t('profile.deleteAccount', 'Eliminar Cuenta')}
+                        {t('profile.deleteAccount')}
                     </Button>
 
                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -326,13 +315,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                                     <AlertTriangle className="w-5 h-5" />
                                 </div>
                                 <DialogTitle className="text-lg font-bold">
-                                    {t('profile.deleteAccountConfirmTitle', '¿Estás seguro de que deseas eliminar tu cuenta?')}
+                                    {t('profile.deleteAccountConfirmTitle')}
                                 </DialogTitle>
                                 <DialogDescription className="text-xs text-muted-foreground pt-1 leading-relaxed">
-                                    {t(
-                                        'profile.deleteAccountConfirmDesc',
-                                        'Esta acción no se puede deshacer. Se borrarán permanentemente todos tus juegos guardados, puntuaciones, preferencias y credenciales de acceso.'
-                                    )}
+                                    {t('profile.deleteAccountConfirmDesc')}
                                 </DialogDescription>
                             </DialogHeader>
 
@@ -343,7 +329,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                                     disabled={isDeleting}
                                     onClick={() => setIsDialogOpen(false)}
                                 >
-                                    {t('profile.deleteAccountCancelBtn', 'Cancelar')}
+                                    {t('profile.deleteAccountCancelBtn')}
                                 </Button>
                                 <Button
                                     variant="destructive"
@@ -352,8 +338,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ className = '' }) => {
                                     disabled={isDeleting}
                                 >
                                     {isDeleting
-                                        ? 'Eliminando...'
-                                        : t('profile.deleteAccountConfirmBtn', 'Sí, eliminar mi cuenta')}
+                                        ? t('common.deleting')
+                                        : t('profile.deleteAccountConfirmBtn')}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>

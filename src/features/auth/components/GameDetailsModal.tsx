@@ -186,14 +186,14 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
                         onClick={onClose}
                         className="w-full sm:w-auto h-11 sm:h-10 min-h-11"
                     >
-                        {t('gameDetailsModal.close', 'Cerrar')}
+                        {t('gameDetailsModal.close')}
                     </Button>
                     <Button
                         onClick={() => onEdit(game.id)}
                         className="w-full sm:w-auto h-11 sm:h-10 min-h-11 font-semibold"
                     >
                         <Edit className="w-4 h-4 mr-2" />
-                        {t('gameDetailsModal.update', 'Editar')}
+                        {t('gameDetailsModal.update')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

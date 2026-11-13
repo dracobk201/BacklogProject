@@ -69,17 +69,13 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
     const mutation = useMutation({
         mutationFn: updateUserScoringWeights,
         onSuccess: () => {
-            toast.success(
-                t('ratingConfig.saveSuccess', 'Configuración guardada exitosamente')
-            );
+            toast.success(t('ratingConfig.saveSuccess'));
             queryClient.invalidateQueries({
                 queryKey: ['user-scoring-weights']
             });
         },
         onError: () => {
-            toast.error(
-                t('ratingConfig.saveError', 'Error al guardar la configuración')
-            );
+            toast.error(t('ratingConfig.saveError'));
         }
     });
 
@@ -105,10 +101,10 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                        {t('ratingConfig.title', 'Configuración del Algoritmo')}
+                        {t('ratingConfig.title')}
                     </h1>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                        {t('ratingConfig.subtitle', 'Ajusta los pesos para priorizar los juegos que más te interesan.')}
+                        {t('ratingConfig.subtitle')}
                     </p>
                 </div>
 
@@ -120,7 +116,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                         className="h-10 min-h-11 text-xs font-semibold active:scale-95"
                     >
                         <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
-                        {t('ratingConfig.reset', 'Restablecer')}
+                        {t('ratingConfig.reset')}
                     </Button>
                     <Button
                         type="submit"
@@ -128,7 +124,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                         className="h-10 min-h-11 text-xs font-semibold active:scale-95"
                     >
                         <Save className="w-3.5 h-3.5 mr-1.5" />
-                        {t('ratingConfig.submit', 'Guardar')}
+                        {t('ratingConfig.submit')}
                     </Button>
                 </div>
             </div>
@@ -139,10 +135,10 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                     <CardHeader className="pb-3">
                         <CardTitle className="text-base font-bold flex items-center space-x-2">
                             <Sparkles className="w-4 h-4 text-primary" />
-                            <span>{t('ratingConfig.generalFactors', 'Factores de Ponderación')}</span>
+                            <span>{t('ratingConfig.generalFactors')}</span>
                         </CardTitle>
                         <CardDescription className="text-xs">
-                            {t('ratingConfig.factorsDescription', 'Puntúa de 1 a 100 la importancia de cada atributo.')}
+                            {t('ratingConfig.factorsDescription')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
@@ -198,7 +194,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                             {t('ratingConfig.gameType')}
                         </CardTitle>
                         <CardDescription className="text-xs">
-                            {t('ratingConfig.triangleInfo', 'Arrastra el selector dentro del triángulo para balancear la preferencia entre tipos de juegos.')}
+                            {t('ratingConfig.triangleInfo')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-2">
@@ -216,7 +212,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                             {t('ratingConfig.platform')}
                         </CardTitle>
                         <CardDescription className="text-xs">
-                            {t('ratingConfig.platformsInfo', 'Ajusta la prioridad según tu preferencia por cada consola y plataforma.')}
+                            {t('ratingConfig.platformsInfo')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -235,7 +231,7 @@ const RatingConfigForm: React.FC<RatingConfigFormProps> = ({
                         className="w-full h-12 min-h-[48px] text-base font-bold active:scale-98 shadow-md"
                     >
                         <Save className="w-4 h-4 mr-2" />
-                        {t('ratingConfig.submit', 'Guardar Configuración')}
+                        {t('ratingConfig.submit')}
                     </Button>
                 </div>
             </div>

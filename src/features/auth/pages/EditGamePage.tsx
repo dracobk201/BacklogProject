@@ -169,10 +169,10 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                     </Button>
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
-                            {titleInput || 'Editar Juego'}
+                            {titleInput || t('editGame.title')}
                         </h1>
                         <p className="text-xs text-muted-foreground">
-                            {t('editGame.subtitle', 'Modifica los detalles y progreso de tu partida')}
+                            {t('editGame.subtitle')}
                         </p>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                     className="text-destructive hover:bg-destructive/10 border-border h-10 min-h-11"
                 >
                     <Trash2 className="w-4 h-4 sm:mr-1.5" />
-                    <span className="hidden sm:inline">{t('common.delete', 'Eliminar')}</span>
+                    <span className="hidden sm:inline">{t('common.delete')}</span>
                 </Button>
             </div>
 
@@ -192,7 +192,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                 <CardHeader className="pb-3">
                     <CardTitle className="text-base font-semibold flex items-center space-x-2">
                         <Gamepad2 className="w-4 h-4 text-primary" />
-                        <span>{t('addGame.gameInfo', 'Información Principal')}</span>
+                        <span>{t('addGame.gameInfo')}</span>
                     </CardTitle>
                 </CardHeader>
 
@@ -225,7 +225,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                         )}
                         <div className="flex-1 space-y-1.5 min-w-0">
                             <Label htmlFor="cover-url" className="text-xs font-medium">
-                                {t('editGame.coverUrl', 'URL de Portada')}
+                                {t('editGame.coverUrl')}
                             </Label>
                             <Input
                                 id="cover-url"
@@ -490,7 +490,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                     onClick={() => navigate({ to: '/games' })}
                     className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-semibold active:scale-95"
                 >
-                    {t('common.cancel', 'Cancelar')}
+                    {t('common.cancel')}
                 </Button>
                 <Button
                     type="submit"
@@ -498,7 +498,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                     className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-bold active:scale-95 shadow-md"
                 >
                     <Save className="w-4 h-4 mr-2" />
-                    {t('gameDetailsModal.update', 'Actualizar')}
+                    {t('gameDetailsModal.update')}
                 </Button>
             </div>
 
@@ -510,13 +510,10 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                 <DialogContent className="max-w-md p-6">
                     <DialogHeader>
                         <DialogTitle className="text-lg font-bold">
-                            {t('games.modal.deleteTitle', '¿Eliminar juego?')}
+                            {t('games.modal.deleteTitle')}
                         </DialogTitle>
                         <DialogDescription className="text-sm pt-2">
-                            {t(
-                                'games.modal.deleteContent',
-                                '¿Estás seguro de que deseas eliminar este juego de tu backlog? Esta acción se puede revertir luego.'
-                            )}
+                            {t('games.modal.deleteContent')}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="flex-col sm:flex-row gap-2 pt-4">
@@ -525,7 +522,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                             onClick={() => setIsDeleteDialogOpen(false)}
                             className="w-full sm:w-auto h-11 sm:h-10 min-h-11"
                         >
-                            {t('games.modal.cancelDelete', 'Cancelar')}
+                            {t('games.modal.cancelDelete')}
                         </Button>
                         <Button
                             variant="destructive"
@@ -533,7 +530,7 @@ const EditGameForm: React.FC<EditGameFormProps> = ({
                             disabled={deleteMutation.isPending}
                             className="w-full sm:w-auto h-11 sm:h-10 min-h-11 font-semibold"
                         >
-                            {t('games.modal.confirmDelete', 'Eliminar')}
+                            {t('games.modal.confirmDelete')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
