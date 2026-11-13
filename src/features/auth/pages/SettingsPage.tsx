@@ -38,17 +38,17 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ className = '' }) => {
                     {t('appLayout.settings')}
                 </h1>
                 <p className="text-sm text-muted-foreground mt-0.5">
-                    {t('settings.subtitle', 'Personaliza tu experiencia en la aplicación')}
+                    {t('settings.subtitle')}
                 </p>
             </div>
 
             <Card className="border-border">
                 <CardHeader>
                     <CardTitle className="text-lg font-semibold">
-                        {t('settings.general', 'Preferencias Generales')}
+                        {t('settings.general')}
                     </CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                        {t('settings.generalDescription', 'Ajusta el idioma y la apariencia visual.')}
+                        {t('settings.generalDescription')}
                     </CardDescription>
                 </CardHeader>
 
@@ -63,7 +63,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ className = '' }) => {
                                 </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                {t('settings.selectLanguage', 'Selecciona el idioma de la interfaz')}
+                                {t('settings.selectLanguage')}
                             </p>
                         </div>
 
@@ -75,7 +75,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ className = '' }) => {
                                 }}
                             >
                                 <SelectTrigger className="min-h-11 sm:min-h-[38px]">
-                                    <SelectValue placeholder="Idioma" />
+                                    <SelectValue placeholder={t('settings.language')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="en">
@@ -109,8 +109,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ className = '' }) => {
                             </div>
                             <p className="text-xs text-muted-foreground">
                                 {theme === 'dark'
-                                    ? t('settings.darkThemeActive', 'Tema oscuro activo')
-                                    : t('settings.lightThemeActive', 'Tema claro activo')}
+                                    ? t('settings.darkThemeActive')
+                                    : t('settings.lightThemeActive')}
                             </p>
                         </div>
 

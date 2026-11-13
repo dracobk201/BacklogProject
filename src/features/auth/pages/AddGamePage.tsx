@@ -217,10 +217,10 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
         <form onSubmit={handleSubmit} className={`space-y-6 max-w-2xl mx-auto py-2 pb-12 ${className}`}>
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                    {t('addGame.title', 'Añadir a tu Backlog')}
+                    {t('addGame.title')}
                 </h1>
                 <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                    {t('addGame.subtitle', 'Busca o escribe el título del juego para autocompletar su información.')}
+                    {t('addGame.subtitle')}
                 </p>
             </div>
 
@@ -228,7 +228,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                 <CardHeader className="pb-3">
                     <CardTitle className="text-base font-semibold flex items-center space-x-2">
                         <Gamepad2 className="w-4 h-4 text-primary" />
-                        <span>{t('addGame.gameInfo', 'Información Principal')}</span>
+                        <span>{t('addGame.gameInfo')}</span>
                     </CardTitle>
                 </CardHeader>
 
@@ -244,7 +244,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                                 value={titleInput}
                                 onChange={(e) => handleSearchChange(e.target.value)}
                                 onFocus={() => searchResults.length > 0 && setShowSuggestions(true)}
-                                placeholder={t('addGame.typeGamePlaceholder', 'Escribe el nombre del juego...')}
+                                placeholder={t('addGame.typeGamePlaceholder')}
                                 className="min-h-11 pr-10 text-sm"
                                 autoComplete="off"
                             />
@@ -302,10 +302,10 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                             <div className="flex-1 text-xs">
                                 <p className="font-semibold text-primary flex items-center">
                                     <Sparkles className="w-3.5 h-3.5 mr-1" />
-                                    {t('addGame.autoEnriched', 'Datos enriquecidos con OpenCritic')}
+                                    {t('addGame.autoEnriched')}
                                 </p>
                                 <p className="text-muted-foreground mt-0.5">
-                                    {t('addGame.coverDetected', 'Portada y calificaciones obtenidas con éxito.')}
+                                    {t('addGame.coverDetected')}
                                 </p>
                             </div>
                             <Button
@@ -577,7 +577,7 @@ const AddGamePage: React.FC<AddGamePageProps> = ({ className = '' }) => {
                     onClick={() => navigate({ to: '/games' })}
                     className="w-full sm:w-auto flex-1 h-12 min-h-12 text-sm font-semibold active:scale-95"
                 >
-                    {t('common.cancel', 'Cancelar')}
+                    {t('common.cancel')}
                 </Button>
                 <Button
                     type="submit"

@@ -10,11 +10,40 @@
         "logout": "Disconnetti",
         "footer": "Backlog Priority ©{{year}}"
     },
+    "common": {
+        "cancel": "Annulla",
+        "delete": "Elimina",
+        "deleting": "Eliminazione...",
+        "save": "Salva",
+        "edit": "Modifica",
+        "close": "Chiudi",
+        "back": "Indietro"
+    },
+    "dashboard": {
+        "subtitle": "Organizza il tuo backlog e supera la paralisi da analisi.",
+        "totalGames": "Totale nel Backlog",
+        "registered": "Titoli",
+        "inProgress": "In corso",
+        "finished": "Completati",
+        "waiting": "Da iniziare",
+        "smartRecommendation": "Raccomandazione Intelligente",
+        "whatToPlayNext": "A cosa giocare adesso?",
+        "recommendationExplanation": "Calcolato in base al tuo algoritmo di preferenze, entusiasmo e tempo a disposizione.",
+        "priorityScore": "Punteggio di priorità",
+        "viewInGames": "Visualizza nel Catalogo",
+        "emptyBacklog": "Non hai ancora giochi in attesa nel tuo backlog.",
+        "browseAll": "Esplora e filtra l'intera collezione",
+        "adjustWeights": "Calibra i pesi del tuo algoritmo"
+    },
     "addGame": {
-        "title": "Aggiungi un nuovo gioco al tuo backlog",
+        "title": "Aggiungi al tuo Backlog",
+        "subtitle": "Cerca o scrivi il titolo del gioco per completare automaticamente le informazioni.",
+        "gameInfo": "Informazioni Principali",
         "gameName": "Nome del Gioco",
         "gameNameRequired": "Inserisci il nome del gioco!",
         "typeGamePlaceholder": "Cerca o scrivi un gioco (es. Mario)",
+        "autoEnriched": "Dati arricchiti con OpenCritic",
+        "coverDetected": "Copertina e valutazioni recuperate con successo.",
         "excitement": "Entusiasmo",
         "dropped": "Abbandonato",
         "beatenBefore": "Già Completato",
@@ -42,6 +71,8 @@
         "errorFailed": "Impossibile aggiungere il gioco"
     },
     "games": {
+        "subtitle": "Catalogo completo ordinato per priorità.",
+        "noGames": "Nessun gioco da mostrare con i filtri attuali.",
         "unknownPlatform": "Piattaforma Sconosciuta",
         "addGame": "Aggiungi Gioco",
         "showCompleted": "Mostra Giochi Completati",
@@ -56,9 +87,9 @@
             "updateContent": "Modificando questo gioco, verrà aggiornato nella tua lista.",
             "updateConfirm": "Sì, modifica",
             "updateCancel": "Annulla",
-            "deleteTitle": "Vuoi eliminare questo gioco?",
-            "deleteContent": "Il gioco verrà rimosso definitivamente dalla tua lista.",
-            "confirmDelete": "Sì, elimina",
+            "deleteTitle": "Eliminare gioco?",
+            "deleteContent": "Sei sicuro di voler eliminare questo gioco dal tuo backlog? Questa azione può essere annullata in seguito.",
+            "confirmDelete": "Elimina",
             "cancelDelete": "Annulla"
         }
     },
@@ -67,7 +98,9 @@
         "close": "Chiudi"
     },
     "editGame": {
-        "title": "Aggiorna Gioco",
+        "title": "Modifica Gioco",
+        "subtitle": "Modifica i dettagli e i progressi della tua partita",
+        "coverUrl": "URL Copertina",
         "delete": "Elimina",
         "submit": "Aggiorna Gioco",
         "cancel": "Annulla",
@@ -84,9 +117,9 @@
             "updateContent": "Modificando questo gioco, verrà aggiornato nella tua lista.",
             "updateConfirm": "Sì, modifica",
             "updateCancel": "Annulla",
-            "deleteTitle": "Vuoi eliminare questo gioco?",
-            "deleteContent": "Il gioco verrà rimosso dalla tua lista.",
-            "confirmDelete": "Sì, elimina",
+            "deleteTitle": "Eliminare gioco?",
+            "deleteContent": "Sei sicuro di voler eliminare questo gioco dal tuo backlog? Questa azione può essere annullata in seguito.",
+            "confirmDelete": "Elimina",
             "cancelDelete": "Annulla"
         }
     },
@@ -98,6 +131,14 @@
     },
     "ratingConfig": {
         "title": "Configurazione Valutazioni",
+        "subtitle": "Regola i pesi per dare priorità ai giochi che ti interessano di più.",
+        "saveSuccess": "Configurazione salvata con successo",
+        "saveError": "Errore durante il salvataggio della configurazione",
+        "reset": "Ripristina",
+        "generalFactors": "Fattori di Ponderazione",
+        "factorsDescription": "Valuta da 1 a 100 l'importanza di ciascun attributo.",
+        "triangleInfo": "Trascina il selettore all'interno del triangolo per bilanciare le preferenze tra i tipi di gioco.",
+        "platformsInfo": "Regola la priorità in base alle tue preferenze per ciascuna console e piattaforma.",
         "excitement": "Entusiasmo",
         "dropped": "Abbandonato",
         "beatenBefore": "Già Completato",
@@ -115,18 +156,21 @@
         "lengthHoursInfo": "Valori più bassi danno priorità ai giochi brevi. Valori più alti favoriscono i titoli più lunghi. 50 indica nessuna preferenza."
     },
     "settings": {
+        "subtitle": "Personalizza la tua esperienza nell'applicazione",
+        "general": "Preferenze Generali",
+        "generalDescription": "Personalizza la lingua e l'aspetto dell'applicazione.",
         "language": "Lingua",
         "english": "Inglese",
         "spanish": "Spagnolo",
         "italian": "Italiano",
         "darkMode": "Modalità Scura",
         "lightMode": "Modalità Chiara",
-        "general": "Preferenze Generali",
-        "generalDescription": "Personalizza la lingua e l'aspetto dell'applicazione.",
+        "themeDescription": "Attiva o disattiva il tema scuro",
+        "darkThemeActive": "Tema scuro attivo",
+        "lightThemeActive": "Tema chiaro attivo",
         "preferences": "Preferenze",
-        "selectLanguage": "Scegli la lingua dell'interfaccia",
-        "theme": "Aspetto",
-        "themeDescription": "Attiva o disattiva il tema scuro"
+        "preferencesDescription": "Personalizza la lingua e l'aspetto dell'applicazione.",
+        "selectLanguage": "Scegli la lingua dell'interfaccia"
     },
     "profile": {
         "title": "Profilo Utente",
@@ -134,6 +178,7 @@
         "memberSince": "Membro da",
         "dataSecurity": "Sicurezza e Privacy",
         "securityNotice": "I tuoi dati e la tua libreria di giochi sono crittografati e archiviati in modo sicuro su Supabase.",
+        "manualDeleteRequest": "Richiedi la cancellazione manuale dei dati",
         "dangerZone": "Zona Pericolosa",
         "deleteAccount": "Elimina Account",
         "deleteAccountDesc": "Elimina definitivamente il tuo account e tutti i dati associati.",

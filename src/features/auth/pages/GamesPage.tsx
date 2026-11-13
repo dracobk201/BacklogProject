@@ -122,7 +122,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                         {t('appLayout.allMyGames')}
                     </h1>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                        {t('games.subtitle', 'Catálogo completo ordenado por prioridad.')}
+                        {t('games.subtitle')}
                     </p>
                 </div>
 
@@ -165,7 +165,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                 <div className="text-center py-16 space-y-3 bg-muted/20 rounded-2xl border border-dashed border-border p-6">
                     <Gamepad2 className="w-12 h-12 mx-auto text-muted-foreground/50" />
                     <p className="text-sm text-muted-foreground">
-                        {t('games.noGames', 'No hay videojuegos para mostrar con los filtros actuales.')}
+                        {t('games.noGames')}
                     </p>
                     <Button
                         variant="outline"
@@ -279,13 +279,10 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                 <DialogContent className="max-w-md p-6">
                     <DialogHeader>
                         <DialogTitle className="text-lg font-bold">
-                            {t('games.modal.deleteTitle', '¿Eliminar juego?')}
+                            {t('games.modal.deleteTitle')}
                         </DialogTitle>
                         <DialogDescription className="text-sm pt-2">
-                            {t(
-                                'games.modal.deleteContent',
-                                '¿Estás seguro de que deseas eliminar este juego de tu backlog? Esta acción se puede revertir luego.'
-                            )}
+                            {t('games.modal.deleteContent')}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="flex-col sm:flex-row gap-2 pt-4">
@@ -294,7 +291,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                             onClick={() => setGameToDelete(null)}
                             className="w-full sm:w-auto h-11 sm:h-10 min-h-11"
                         >
-                            {t('games.modal.cancelDelete', 'Cancelar')}
+                            {t('games.modal.cancelDelete')}
                         </Button>
                         <Button
                             variant="destructive"
@@ -302,7 +299,7 @@ const GamesPage: React.FC<GamesPageProps> = ({ className = '' }) => {
                             disabled={deleteGameMutation.isPending}
                             className="w-full sm:w-auto h-11 sm:h-10 min-h-11 font-semibold"
                         >
-                            {t('games.modal.confirmDelete', 'Eliminar')}
+                            {t('games.modal.confirmDelete')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -94,7 +94,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                         {t('appLayout.dashboard')}
                     </h1>
                     <p className="text-sm text-muted-foreground mt-0.5">
-                        {t('dashboard.subtitle', 'Organiza tu backlog y vence la parálisis por análisis.')}
+                        {t('dashboard.subtitle')}
                     </p>
                 </div>
 
@@ -112,7 +112,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                 <Card className="border-border">
                     <CardHeader className="p-4 pb-2">
                         <CardDescription className="text-xs font-medium">
-                            {t('dashboard.totalGames', 'Total en Backlog')}
+                            {t('dashboard.totalGames')}
                         </CardDescription>
                         <CardTitle className="text-2xl font-bold">
                             {isLoadingGames ? '-' : stats.total}
@@ -121,7 +121,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                     <CardContent className="p-4 pt-0">
                         <div className="flex items-center text-xs text-muted-foreground">
                             <Gamepad2 className="w-3.5 h-3.5 mr-1" />
-                            <span>{t('dashboard.registered', 'Títulos')}</span>
+                            <span>{t('dashboard.registered')}</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -129,7 +129,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                 <Card className="border-border">
                     <CardHeader className="p-4 pb-2">
                         <CardDescription className="text-xs font-medium">
-                            {t('addGame.statusPlaying', 'Jugando')}
+                            {t('addGame.statusPlaying')}
                         </CardDescription>
                         <CardTitle className="text-2xl font-bold text-primary">
                             {isLoadingGames ? '-' : stats.playing}
@@ -138,7 +138,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                     <CardContent className="p-4 pt-0">
                         <div className="flex items-center text-xs text-muted-foreground">
                             <Play className="w-3.5 h-3.5 mr-1 text-primary" />
-                            <span>{t('dashboard.inProgress', 'En curso')}</span>
+                            <span>{t('dashboard.inProgress')}</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -146,7 +146,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                 <Card className="border-border">
                     <CardHeader className="p-4 pb-2">
                         <CardDescription className="text-xs font-medium">
-                            {t('addGame.statusCompleted', 'Completados')}
+                            {t('addGame.statusCompleted')}
                         </CardDescription>
                         <CardTitle className="text-2xl font-bold text-green-500">
                             {isLoadingGames ? '-' : stats.completed}
@@ -155,7 +155,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                     <CardContent className="p-4 pt-0">
                         <div className="flex items-center text-xs text-muted-foreground">
                             <Trophy className="w-3.5 h-3.5 mr-1 text-green-500" />
-                            <span>{t('dashboard.finished', 'Terminados')}</span>
+                            <span>{t('dashboard.finished')}</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -163,7 +163,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                 <Card className="border-border">
                     <CardHeader className="p-4 pb-2">
                         <CardDescription className="text-xs font-medium">
-                            {t('addGame.statusPending', 'Pendientes')}
+                            {t('addGame.statusPending')}
                         </CardDescription>
                         <CardTitle className="text-2xl font-bold text-amber-500">
                             {isLoadingGames ? '-' : stats.pending}
@@ -172,7 +172,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                     <CardContent className="p-4 pt-0">
                         <div className="flex items-center text-xs text-muted-foreground">
                             <Clock className="w-3.5 h-3.5 mr-1 text-amber-500" />
-                            <span>{t('dashboard.waiting', 'Por comenzar')}</span>
+                            <span>{t('dashboard.waiting')}</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -188,17 +188,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                     <div className="flex items-center space-x-2">
                         <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-xs">
                             <Sparkles className="w-3 h-3 mr-1" />
-                            {t('dashboard.smartRecommendation', 'Recomendación Inteligente')}
+                            {t('dashboard.smartRecommendation')}
                         </Badge>
                     </div>
                     <CardTitle className="text-lg sm:text-xl font-bold mt-2">
-                        {t('dashboard.whatToPlayNext', '¿A qué jugar a continuación?')}
+                        {t('dashboard.whatToPlayNext')}
                     </CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                        {t(
-                            'dashboard.recommendationExplanation',
-                            'Calculado según tu algoritmo de preferencias, entusiasmo y tiempo disponible.'
-                        )}
+                        {t('dashboard.recommendationExplanation')}
                     </CardDescription>
                 </CardHeader>
 
@@ -210,6 +207,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                                     src={topRecommendedGame.cover_url}
                                     alt={topRecommendedGame.game_title}
                                     className="w-20 h-28 sm:w-24 sm:h-32 rounded-lg object-cover shadow-sm shrink-0"
+                                    loading="lazy"
                                 />
                             )}
                             <div className="flex-1 space-y-1.5 min-w-0">
@@ -236,7 +234,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                                 </div>
                                 {weights && (
                                     <p className="text-xs text-primary font-medium">
-                                        {t('dashboard.priorityScore', 'Puntuación de prioridad')}:{' '}
+                                        {t('dashboard.priorityScore')}:{' '}
                                         {calculateCustomPriority(topRecommendedGame, weights).toFixed(1)} / 10
                                     </p>
                                 )}
@@ -247,7 +245,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                                     onClick={() => navigate({ to: '/games' })}
                                     className="flex-1 sm:flex-initial h-10 min-h-11 text-xs font-semibold"
                                 >
-                                    {t('dashboard.viewInGames', 'Ver en Catálogo')}
+                                    {t('dashboard.viewInGames')}
                                     <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                                 </Button>
                             </div>
@@ -255,7 +253,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                     ) : (
                         <div className="text-center py-8 text-muted-foreground space-y-3">
                             <p className="text-sm">
-                                {t('dashboard.emptyBacklog', 'Aún no tienes juegos pendientes en tu backlog.')}
+                                {t('dashboard.emptyBacklog')}
                             </p>
                             <Button
                                 variant="outline"
@@ -274,7 +272,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Card
                     onClick={() => navigate({ to: '/games' })}
-                    className="border-border hover:border-primary/50 transition-colors cursor-pointer p-4 flex items-center justify-between touch-manipulation active:scale-[0.99]"
+                    className="border-border hover:border-primary/50 transition-colors cursor-pointer p-3 flex flex-row items-center justify-between touch-manipulation active:scale-[0.99]"
                 >
                     <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -283,7 +281,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                         <div>
                             <h4 className="text-sm font-semibold">{t('appLayout.myGames')}</h4>
                             <p className="text-xs text-muted-foreground">
-                                {t('dashboard.browseAll', 'Explora y filtra toda tu colección')}
+                                {t('dashboard.browseAll')}
                             </p>
                         </div>
                     </div>
@@ -292,7 +290,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
 
                 <Card
                     onClick={() => navigate({ to: '/games/rating-config' })}
-                    className="border-border hover:border-primary/50 transition-colors cursor-pointer p-4 flex items-center justify-between touch-manipulation active:scale-[0.99]"
+                    className="border-border hover:border-primary/50 transition-colors cursor-pointer p-3 flex flex-row items-center justify-between touch-manipulation active:scale-[0.99]"
                 >
                     <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -301,7 +299,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ className = '' }) => {
                         <div>
                             <h4 className="text-sm font-semibold">{t('appLayout.ratingConfig')}</h4>
                             <p className="text-xs text-muted-foreground">
-                                {t('dashboard.adjustWeights', 'Calibra los pesos de tu algoritmo')}
+                                {t('dashboard.adjustWeights')}
                             </p>
                         </div>
                     </div>
